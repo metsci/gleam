@@ -1,0 +1,298 @@
+.gleam {
+    overflow: hidden;
+}
+
+.gleam > canvas {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.gleam.error {
+    box-sizing: border-box;
+    padding: 1.5em !important;
+    color: rgb( 208,0,0 );
+    font-family: sans-serif;
+}
+
+.gleam > gleam-pane {
+    visibility: hidden;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    z-index: -16777215;
+    display: inline-block;
+    position: absolute;
+    overflow: hidden;
+}
+
+.gleam > gleam-pane > fill-painter.background {
+    --color: rgb( 255,255,255 );
+}
+
+.gleam linear-ticker {
+    --approx-major-spacing-px: 100;
+    --minor-per-major: 5;
+}
+
+.gleam axis-painter {
+    --text-font: 13px sans-serif;
+    --text-color: rgb( 50,50,50 );
+    --tick-color: rgb( 100,100,100 );
+    --tick-length-px: 6;
+    --tick-width-px: 1;
+    --space-tick-to-text-px: 4;
+    --space-text-to-title-px: 5;
+    --edge-offset-px: 0;
+}
+
+.gleam grid-painter {
+    --major-color: rgba( 212,212,212, 0.80 );
+    --minor-color: rgba( 212,212,212, 0.25 );
+    --major-width-px: 1;
+    --minor-width-px: 1;
+}
+
+.gleam plot-border-painter {
+    --color: rgb( 100,100,100 );
+    --width-px: 1;
+}
+
+.gleam cursor-painter {
+    --inner-color: rgba( 43,69,255, 1.0 );
+    --edge-color: rgba( 89,102,255, 0.4 );
+    --inner-color-hovered: rgba( 114,131,255, 1.0 );
+    --edge-color-hovered: rgba( 144,153,255, 0.4 );
+    --inner-width-px: 2;
+    --edge-width-px: 1;
+}
+
+.gleam tags-painter {
+    --color: rgb( 25,25,25 );
+    --tag-width-px: 15;
+    --tag-height-px: 11;
+    --outline-width-px: 2;
+    --edge-offset-px: 0;
+}
+
+.gleam basic-line-painter {
+    --line-mode: straight;
+    --line-step-align: centered-on-datapoint;
+    --line-step-risers: on;
+    --line-color: rgb( 255,0,0 );
+    --line-thickness-px: 1;
+
+    --dot-mode: solo;
+    --dot-diameter-px: 3;
+
+    --fill-mode: off;
+    --fill-color: rgba( 255,100,100, 0.4 );
+    --fill-baseline: 0;
+
+    --offscreen-data-indicator-x: off;
+    --offscreen-data-indicator-y: off;
+    --offscreen-data-indicator-color: rgb( 128,0,0 );
+    --offscreen-data-indicator-diameter-px: 4;
+}
+
+.gleam solid-painter {
+    --color: rgba( 153,153,255, 1.0 );
+}
+
+.gleam scatter-painter {
+    --shape: disc;
+
+    --fixed-size-px: 8;
+    --fixed-color: rgb( 25,25,25 );
+
+    --variable-size-fn: linear;
+    --variable-size-min-px: 1;
+    --variable-size-max-px: 18;
+
+    --thickness-px: 1.5;
+    --feather-dpx: 1.5; /* Physical pixels, not logical pixels */
+}
+
+.gleam bar-axis-painter {
+    --edge-offset-px: 10;
+    --bar-width-px: 11;
+}
+.gleam bar-axis-painter axis-painter {
+    --tick-length-px: 0;
+}
+.gleam bar-axis-painter plot-border-painter {
+    --color: rgb( 100,100,100 );
+}
+.gleam bar-axis-painter grid-painter {
+    --major-color: rgb( 100,100,100 );
+    --minor-width-px: 0;
+}
+
+.gleam .tooltip {
+    z-index: 999;
+    pointer-events: none;
+    font: 13px sans-serif;
+    background: rgba( 255,255,255, 0.7 );
+    padding: 0px 3px;
+    --x-offset-px: 3;
+    --y-offset-px: 3;
+}
+
+.gleam gleam-pane.scrollbar > site-in-parent {
+    --row-height: rigid( 13px );
+    --column-width: rigid( 13px );
+}
+.gleam gleam-pane.scrollbar > scrollbar-painter {
+    --track-color: rgb( 212,212,212 );
+    --thumb-color: rgb( 165,165,165 );
+}
+
+.gleam gleam-pane.x-edge-axis > site-in-parent,
+.gleam gleam-pane.x-bar-axis > site-in-parent {
+    --row-height: rigid( pref );
+}
+.gleam gleam-pane.y-edge-axis > site-in-parent,
+.gleam gleam-pane.y-bar-axis > site-in-parent {
+    --column-width: rigid( pref );
+}
+
+.gleam gleam-pane.plot-north-edge > site-in-parent,
+.gleam gleam-pane.plot-south-edge > site-in-parent {
+    --row-height: rigid( pref );
+}
+.gleam gleam-pane.plot-east-edge > site-in-parent,
+.gleam gleam-pane.plot-west-edge > site-in-parent {
+    --column-width: rigid( pref );
+}
+
+
+/**
+ * Mouse cursors for various draggers.
+ *
+ * Although conceptually the cursor belongs to the dragger, the
+ * implementation mechanics actually set the cursor property of
+ * the canvas.
+ */
+
+.gleam .clickable {
+    cursor: pointer;
+}
+
+.gleam .clickable.dragged {
+    cursor: ew-resize;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .draggable.dragged {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .y-scroller {
+    cursor: default;
+}
+
+.gleam .y-scroller.dragged {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .left-edge-dragger {
+    cursor: w-resize;
+}
+
+.gleam .right-edge-dragger {
+    cursor: e-resize;
+}
+
+.gleam .x-axis-panner,
+.gleam .y-axis-panner,
+.gleam .xy-axis-panner {
+    cursor: default;
+}
+
+.gleam .x-axis-panner.dragged {
+    cursor: ew-resize;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .y-axis-panner.dragged {
+    cursor: ns-resize;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .xy-axis-panner.dragged {
+    cursor: move;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .x-axis-zoomer,
+.gleam .y-axis-zoomer,
+.gleam .xy-axis-zoomer {
+    cursor: zoom-in;
+}
+
+.gleam .x-tag-dragger {
+    cursor: ew-resize;
+}
+
+.gleam .y-tag-dragger {
+    cursor: ns-resize;
+}
+
+.gleam .x-multitag-dragger {
+    cursor: move;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.gleam .y-multitag-dragger {
+    cursor: move;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+
+/**
+ * Styles for use with gleamInspect
+ */
+
+.gleam.inspect-picking gleam-pane.inspect-hovered > fill-painter.inspect-highlight {
+    --color: rgba( 255,64,64, 0.3 );
+}
+.gleam.inspect-picking gleam-pane.inspect-hovered > border-painter.inspect-highlight {
+    --color: rgb( 255,64,64 );
+    --width-px: 3;
+}
+
+.gleam gleam-pane.inspect-selected > fill-painter.inspect-highlight {
+    --color: rgba( 96,128,255, 0.3 );
+}
+.gleam gleam-pane.inspect-selected > border-painter.inspect-highlight {
+    --color: rgb( 96,128,255 );
+    --width-px: 3;
+}
+
+.gleam.inspect-picking gleam-pane.inspect-selected.inspect-hovered > fill-painter.inspect-highlight {
+    --color: rgba( 128,96,255, 0.3 );
+}
+.gleam.inspect-picking gleam-pane.inspect-selected.inspect-hovered > border-painter.inspect-highlight {
+    --color: rgb( 128,96,255 );
+    --width-px: 3;
+}

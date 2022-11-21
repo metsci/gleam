@@ -1,0 +1,7 @@
+# Scatter Plot Example
+
+Use `ScatterPainter` to display a scatter plot.
+
+Each data point has four coords: x, y, color, and size.
+
+![Screenshot](./screenshot.png)

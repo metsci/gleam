@@ -1,0 +1,25 @@
+image: node:16
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - install
+  - build
+  - test
+
+doInstall:
+  stage: install
+  script:
+    - npm ci
+
+doBuild:
+  stage: build
+  script:
+    - npm run build
+
+doTest:
+  stage: test
+  script:
+    - npm test

@@ -1,0 +1,59 @@
+{
+  "name": "@metsci/gleam-timeline",
+  "version": "1.0.0-rc.0",
+  "description": "Multi-row timeline",
+  "author": "Metron, Inc.",
+  "license": "BSD 3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metsci/gleam.git"
+  },
+  "module": "./build/dist/index.js",
+  "types": "./build/dist/types/index.d.ts",
+  "files": [
+    "build/dist/**",
+    "src/**"
+  ],
+  "scripts": {
+    "clean": "shx rm -rf ./build",
+    "cleanDeps": "shx rm -rf ./node_modules",
+    "cleanFull": "run-s clean cleanDeps",
+    "build": "run-s build:resources build:compile build:bundle",
+    "build:resources": "cpx \"src/**/*.{vert,frag,css}\" build/temp -v",
+    "build:compile": "tsc --build --verbose",
+    "build:bundle": "rollup --config ./rollup.config.js",
+    "watch": "run-p -cl watch:resources watch:compile watch:bundle",
+    "watch:resources": "cpx \"src/**/*.{vert,frag,css}\" build/temp -v --watch",
+    "watch:compile": "tsc --build --verbose --watch --pretty",
+    "watch:bundle": "rollup --config ./rollup.config.js --watch --waitForBundleInput",
+    "test": "run-s build test:run",
+    "test:run": "karma start karma.config.js --single-run",
+    "test:debug": "npm run build && karma start karma.config.js --browsers=Chrome --debug",
+    "prepack": "run-s updateHeaders concretizeDepVersions clean test",
+    "updateHeaders": "node ../../tools/updateFileHeaders.js ../../LICENSE ./src",
+    "concretizeDepVersions": "node ../../tools/concretizeDepVersions.js ./package.json"
+  },
+  "devDependencies": {
+    "@metsci/rollup-plugin-asset": "*",
+    "@metsci/rollup-plugin-remove-comments": "*",
+    "@rollup/plugin-commonjs": "*",
+    "@rollup/plugin-node-resolve": "*",
+    "cpx2": "*",
+    "jasmine-core": "*",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-jasmine": "*",
+    "karma-spec-reporter": "*",
+    "npm-run-all": "*",
+    "rollup": "*",
+    "rollup-plugin-sourcemaps": "*",
+    "rollup-plugin-string": "*",
+    "shx": "*",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "@metsci/gleam-core": "*",
+    "@metsci/gleam-util": "*",
+    "immutable": "*"
+  }
+}
