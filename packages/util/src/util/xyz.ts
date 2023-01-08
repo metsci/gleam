@@ -148,7 +148,7 @@ export function sphereSurfaceTriangleContains( a_UNIT: Xyz, b_UNIT: Xyz, c_UNIT:
     const signumCentroidFromBC = sign( dot3( centroid_UNIT, gcnBC_UNIT ) );
     if ( signumCentroidFromBC !== signumCentroidFromAB ) {
     // Centroid is not an interior point, presumably due to precision error and triangle degeneracy
-    return false;
+        return false;
     }
     const signumPFromBC = sign( dot3( p_UNIT, gcnBC_UNIT ) );
     if ( signumPFromBC !== signumCentroidFromBC ) {
@@ -161,7 +161,7 @@ export function sphereSurfaceTriangleContains( a_UNIT: Xyz, b_UNIT: Xyz, c_UNIT:
     const signumPFromCA = sign( dot3( p_UNIT, gcnCA_UNIT ) );
     if ( signumCentroidFromCA !== signumCentroidFromAB ) {
     // Centroid is not an interior point, presumably due to precision error and triangle degeneracy
-    return false;
+        return false;
     }
     if ( signumPFromCA !== signumCentroidFromCA ) {
         // P and Centroid are on different sides of CA

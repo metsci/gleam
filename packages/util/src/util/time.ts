@@ -203,7 +203,7 @@ export function utcTimeToPsec( year: number, month: number, day: number, hour: n
 
 /**
  * Cases:
- *  - Returns 1 result for most arguments
+ *  - Returns one result for most arguments
  *  - Returns zero results iff `t` gets skipped over by a "spring forward" time change
  *  - Returns two results iff `t` appears twice due to a "fall back" time change
  */

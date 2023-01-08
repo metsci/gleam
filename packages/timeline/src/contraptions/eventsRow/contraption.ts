@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Axis1D, axisBoundsFn, ChildlessLayout, createDomPeer, createTextImage, cssBoolean, cssColor, cssFloat, cssString, currentDpr, DEFAULT_CHARS, DragHandler, estimateFontMetrics, FontMetrics, frozenSupplier, getMouseAxisCoord1D, HoverHandler, InputHandler, Interval1D, KeyHandler, Pane, PaneMouseEvent, PeerType, setCssClassPresent, StyleProp, ValueBase, X } from '@metsci/gleam-core';
-import { appendChild, Disposer, DisposerGroup, FireableListenable, hashCode, IMMEDIATE, ImmutableMap, ImmutableSet, isNullish, linkListenables, ListenableBasic, newImmutableMap, newImmutableSet, Nullable, ReadableRef, run, Supplier, ValueObject, _addOldNewActivityListener } from '@metsci/gleam-util';
+import { Axis1D, axisBoundsFn, ChildlessLayout, createDomPeer, createTextImage, cssBoolean, cssColor, cssFloat, cssString, currentDpr, DEFAULT_CHARS, DragHandler, estimateFontMetrics, FontMetrics, frozenSupplier, getMouseAxisCoord1D, HoverHandler, InputHandler, KeyHandler, Pane, PaneMouseEvent, PeerType, setCssClassPresent, StyleProp, ValueBase } from '@metsci/gleam-core';
+import { appendChild, Disposer, DisposerGroup, FireableListenable, hashCode, IMMEDIATE, ImmutableMap, ImmutableSet, Interval1D, isNullish, linkListenables, ListenableBasic, newImmutableMap, newImmutableSet, Nullable, ReadableRef, run, Supplier, ValueObject, X, _addOldNewActivityListener } from '@metsci/gleam-util';
 import { constrainEra, EraConstraintMode, EraConstraints, EventsGroup, isWritableEvent, ReadableEvent, READABLE_EVENT_SYMBOL, WritableEvent, WRITABLE_EVENT_SYMBOL } from './data';
 import { EventsPainter, EventStyle, FALLBACK_EVENT_FILL_PATTERN, GlyphRasterizer } from './painter';
 import { Glyph } from './painter/glyphsProgram';

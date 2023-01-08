@@ -1,6 +1,6 @@
-import { attachAxisInputHandlers1D, createCommonBoundsAxis1D, EAST, EdgeAxisWidget, GridLayout, GridPainter, Interval1D, LinearTicker, Pane, ScatterPainter, setGridCoords, SOUTH, TextAtlasCache, X } from '@metsci/gleam-core';
+import { attachAxisInputHandlers1D, createCommonBoundsAxis1D, EAST, EdgeAxisWidget, GridLayout, GridPainter, LinearTicker, Pane, ScatterPainter, setGridCoords, SOUTH, TextAtlasCache } from '@metsci/gleam-core';
 import { TimeTicker } from '@metsci/gleam-timeline';
-import { LinkedSet } from '@metsci/gleam-util';
+import { Interval1D, LinkedSet, X } from '@metsci/gleam-util';
 
 export class TimelineView {
     readonly tAxisWidget_PSEC: EdgeAxisWidget;

@@ -30,7 +30,7 @@ import { Comparator, get } from '@metsci/gleam-util';
 import { RenderGroupsMap, TileIndex, TilesViewport } from '../support';
 import { createRenderGroups, createTileIndexComparator, WorkerCall, WorkerResult } from './cacheSupport';
 
-// This `workerSelf` tomfoolery could be avoided, using a separate tsconfig with
+// This `workerSelf` business could be avoided, using a separate tsconfig with
 // `webworker` in its `lib` section. That would allow the type checker to ensure
 // we are in a worker. It would also make project structure awkward.
 interface WebWorkerSelf {

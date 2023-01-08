@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Color, Interval1D, put1f, put2f, put4f } from '@metsci/gleam-core';
-import { FireableNotifier, NotifierBasic, requireDefined, run } from '@metsci/gleam-util';
+import { Color, put1f, put2f, put4f } from '@metsci/gleam-core';
+import { FireableNotifier, Interval1D, NotifierBasic, requireDefined, run } from '@metsci/gleam-util';
 import { StringSet } from './glyphsProgram';
 import { requireInt, splitToMilliPrecision, StateMarker } from './misc';
 

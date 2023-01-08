@@ -1,5 +1,5 @@
 # Histogram Example
 
-Use `BasicLinePainter` to display histograms.
+Uses `BasicLinePainter` to display histograms.
 
 ![Screenshot](./screenshot.png)

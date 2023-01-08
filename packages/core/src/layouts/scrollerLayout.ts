@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { Interval2D, Size2D } from '@metsci/gleam-util';
 import { LayoutBase, Pane } from '../core';
-import { Interval2D, Size2D } from '../support';
 
 export class VerticalScrollerLayout extends LayoutBase {
     yOffset_PX: number;

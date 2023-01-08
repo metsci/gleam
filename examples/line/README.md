@@ -1,6 +1,6 @@
 # Line Plot Example
 
-Use `BasicLinePainter` to draw a line.
+Uses `BasicLinePainter` to draw a line.
 
 Shows tooltips when data points are hovered.
 

@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, Disposer, DisposerGroup, RefBasic, tripleEquals } from '@metsci/gleam-util';
+import { appendChild, Disposer, DisposerGroup, Interval2D, RefBasic, tripleEquals } from '@metsci/gleam-util';
 import { Context, Painter } from '../../core';
-import { createDomPeer, Interval2D, PeerType } from '../../support';
+import { createDomPeer, PeerType } from '../../support';
 import { ArrayWithZIndices } from '../../util';
 
 export class CompoundPainter implements Painter {

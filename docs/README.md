@@ -17,9 +17,9 @@ A [**pane**](../packages/core/src/core/pane.ts#L207) is an object that represent
 
 A pane can have a [layout](#layout), child panes, [painters](#painter), and [input handlers](#input-handler).
 
-Within a parent pane, each child pane and painter has a **`zIndex`**. To render a pane, its child panes and painters are rendered from lowest `zIndex` to highest. (Tiebreaker is the order in which they were added to the pane.)
+Within a parent pane, each child pane, painter, and input-handler has a **`zIndex`**. To render a pane, its child panes and painters are rendered from lowest `zIndex` to highest. (Tiebreaker is the order in which they were added to the pane -- children added earlier get rendered earlier.) When handling input, events are offered to a pane's child panes and input-handlers in the reverse of rendering order, so that children that appear visually on top also get the first opportunity to claim input events.
 
-The `zIndex` ordering is capable of interleaving child panes and painters -- e.g. a child pane at `zIndex` `0` would be rendered before a painter at `zIndex` `999`, so the painter's content would appear *on top of the child pane*. In most cases you do want child panes on top of painters, but there are situations where it's helpful to have a painter on top -- e.g. `HorizontalTimeline` has a cursor painter that paints on top of the timeline's content panes.
+The `zIndex` ordering is capable of interleaving child panes with painters and input-handlers -- e.g. a child pane at `zIndex` `0` would be rendered before a painter at `zIndex` `999`, so the painter's content would appear *on top of the child pane*. In most cases you do want child panes on top of painters, but there are situations where it's helpful to have a painter on top -- e.g. `HorizontalTimeline` has a time-cursor painter and an input-handler for dragging the time-cursor, and their `zIndex` values make it feel like the time-cursor is on top of everything else in the timeline, including child panes.
 
 
 ## Layouts
@@ -66,18 +66,18 @@ Consecutive hover events with the same input-target are considered a single cont
 
 For example, the handler that supports dragging a timeline-event bar has an input-target that holds (A) a reference to the dragged bar, and (B) a symbol indicating which part of the bar was being dragged: left edge, right edge, or center. When a spectator fires, it can e.g. highlight/unhighlight the bar on `hover`/`unhover`, or select the bar on `click`.
 
-It's theoretically possible for spectators to be numerous enough, or slow enough, that the application bogs down. This is not expected to happen in practice though: spectators generally decide quickly whether to use or ignore an incoming event, the number of spectators that actually use any given event is small, and we only get a couple of input-events per frame.
+It's theoretically possible to add so many spectators that they bog down your application. This is not expected to happen in practice: spectators generally decide quickly whether to use or ignore an incoming event, the number of spectators that actually use any given event is small, and we only get a couple of input-events per frame.
 
 
 ## Contraptions
 
-A contraption is any class that holds an ad-hoc assemblage of UI objects that are convenient to group together.
+A contraption is any class that holds a purpose-specific assemblage of UI objects that are convenient to group together.
 
-The term "contraption" emphasizes the ad-hoc nature of such classes, which need not conform to any particular interface, structure, or pattern. A contraption can have panes, layouts, painters, input handlers, axes, DOM elements, and any other relevant objects. It can have whatever methods make sense.
+The term "contraption" emphasizes the ad-hoc nature of such classes, which need not conform to any particular interface, structure, or pattern. A contraption can have panes, layouts, painters, input-handlers, axes, DOM elements, and any other relevant objects. It can have whatever methods make sense for the purpose.
 
 A couple of examples to illustrate how varied contraptions can be:
 
- - [`AxisWidget`](../packages/core/src/contraptions/axisWidget.ts) is a contraption that holds an axis, an axis painter, a pane, and a custom layout. The layout sets the pane's preferred size based on the painter's settings. The contraption also creates input handlers for zooming and panning the axis, and attaches them to the pane.
+ - [`AxisWidget`](../packages/core/src/contraptions/axisWidget.ts) is a contraption that holds an axis, an axis painter, a pane, a purpose-specific layout, and input-handlers. The layout sets the pane's preferred size based on the painter's settings. The input-handlers allow zooming and panning the axis.
 
  - [`TooltipDiv`](../packages/core/src/contraptions/tooltip.ts) is a contraption with a DOM `div` element, and convenience methods for setting its text, position, and visibility.
 

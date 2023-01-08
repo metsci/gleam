@@ -77,7 +77,7 @@ export function attachCanvasResizeListener( wnd: Window & typeof globalThis, par
 
 function attachDefaultCanvasResizeListener( wnd: Window & typeof globalThis, canvas: HTMLCanvasElement, listener: CanvasResizeListener ): Disposer {
     // ResizeObserver doesn't fire immediately, so do something approximate
-    // tide us over. This is helpful during app initialization, when e.g.
+    // to tide us over. This is helpful during app initialization, when e.g.
     // common-scale axes need to know their pixel sizes to be initialized
     // to specified bounds
 

@@ -26,10 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Nullable, Supplier } from '@metsci/gleam-util';
+import { Interval1D, Interval2D, Nullable, Point2D, Supplier } from '@metsci/gleam-util';
 import { Axis1D, TagMap } from '../core';
-import { Interval1D, Interval2D } from './interval';
-import { Point2D } from './point';
 import { ValueBase } from './valueBase';
 
 export const GL = WebGLRenderingContext;
@@ -398,12 +396,12 @@ type DprPeer = { peer: DprElement };
 /**
  * Device pixel ratio. This is needed to convert logical pixels (aka CSS pixels)
  * to physical pixels (which are the units used by most Gleam code):
- * ```
+ * ```typescript
  * const dpr = currentDpr( pane );
  * const width_PX = width_LPX * dpr;
  * const height_PX = height_LPX * dpr;
  * ```
- * Reflects desktop-environment scaling (e.g. for Retina displays) and browser zoom.
+ * Reflects desktop-environment scaling (e.g. for HiDPI displays) and browser zoom.
  */
 export function currentDpr( x: DprWindow | DprDocument | DprElement | DprPeer ): number {
     return (

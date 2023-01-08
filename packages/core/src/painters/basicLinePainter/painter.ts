@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { alwaysTrue, clamp, equal, isDefined, Nullable, RefBasic, run, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { alwaysTrue, clamp, equal, Interval2D, isDefined, Nullable, RefBasic, run, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { Context, Painter } from '../../core';
-import { createDomPeer, cssColor, cssEnum, cssFloat, currentDpr, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, GL, GLSL_HIGHP_MAXVALUE, glUniformInterval2D, glUniformRgba, Interval2D, PeerType, pushBufferToDevice_BYTES, put3f, put4f, put6f, StyleProp, ValueBase2 } from '../../support';
+import { createDomPeer, cssColor, cssEnum, cssFloat, currentDpr, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, GL, GLSL_HIGHP_MAXVALUE, glUniformInterval2D, glUniformRgba, PeerType, pushBufferToDevice_BYTES, put3f, put4f, put6f, StyleProp, ValueBase2 } from '../../support';
 import { frozenSupplier } from '../../util';
 
 import fillFragShader_GLSL from './fillShader.frag';
@@ -98,15 +98,15 @@ const POINT_PROG_SOURCE = Object.freeze( {
  * and `y(i)` are defined will be found, and its coords will be used as fallbacks
  * for `xRef` and `yRef` independently.
  *
- * A "solo" vertex is one that has no line segments on either side. A solo
- * vertex will be drawn as a dot. By default, the dot will be slightly larger
- * than the line thickness. If the CSS property `--dot-diameter-px` is set, that
- * value will be used instead.
+ * A "solo" vertex is one that has no line segments on either side. By default, a
+ * solo vertex will be drawn as a dot, and the dot will be slightly larger than
+ * the line thickness. These defaults can be overridden with the `--dot-mode` and
+ * `--dot-diameter-px` CSS properties.
  *
  * An undefined `connect` method is equivalent to one that always returns `true`.
  *
  * Additional per-line information can be included as custom properties. These
- * are handy when using an input listener that gets passed the line object.
+ * are handy when using an input-spectator that gets passed the line object.
  */
 export interface BasicLine {
     length: number;

@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Ref } from '@metsci/gleam-util';
-import { Interval2D, Styleable } from '../support';
+import { Interval2D, Ref } from '@metsci/gleam-util';
+import { Styleable } from '../support';
 import { Context } from './context';
 
 export interface Painter extends Styleable {

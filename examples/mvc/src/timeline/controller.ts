@@ -1,5 +1,5 @@
-import { attachAxisCursor, Interval2D, PaneMouseEvent, put2f } from '@metsci/gleam-core';
-import { activityListenable, Disposer, DisposerGroup, FireableListenable, IMMEDIATE, isDefined } from '@metsci/gleam-util';
+import { attachAxisCursor, PaneMouseEvent, put2f } from '@metsci/gleam-core';
+import { activityListenable, Disposer, DisposerGroup, FireableListenable, IMMEDIATE, Interval2D, isDefined } from '@metsci/gleam-util';
 import { Dot } from '../misc';
 import { Model } from '../model';
 import { TimelineView } from './view';

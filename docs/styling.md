@@ -1,11 +1,10 @@
 # Styling
 
-Gleam painters, layouts, and contraptions get their styling info (colors, spacings, etc.) from CSS. Each painter, layout, or contraption has an associated **DOM peer** -- an invisible DOM element, whose place in the DOM tree mirrors the tree of Gleam panes and painter, and whose CSS style the painter can query.
+Gleam painters, layouts, and contraptions get their styling info (colors, spacings, etc.) from CSS. Each Gleam object (painter, layout, or contraption) has an associated **DOM peer** -- an invisible DOM element whose CSS style the Gleam object can query. The DOM peers are organized as a tree that mirrors the tree of Gleam objects.
 
-Settings in pixels units are scaled by the current `devicePixelRatio`, so that Gleam behaves properly with:
- - HiDPI displays
- - OS display scaling
- - Browser zoom (i.e. CTRL+Plus and CTRL+Minus)
+Settings in pixel units are scaled by the current `devicePixelRatio`, so that Gleam can honor:
+ - Browser zoom (adjustable with CTRL+Plus and CTRL+Minus)
+ - Desktop-environment scaling (e.g. for HiDPI displays)
 
 
 ## Gleam Inspect
@@ -20,7 +19,7 @@ Here's example styling code for a simple painter:
 import { Context, createDomPeer, cssColor, cssFloat, currentDpr, Interval2D, Painter, PeerType, StyleProp } from '@metsci/gleam-core';
 
 export class ExamplePainter implements Painter {
-    // Create a DOM peer -- added to the DOM when this painter gets added to a pane
+    // Create a DOM peer -- automatically added to the DOM when this painter gets added to a pane
     readonly peer = createDomPeer( 'example-painter', this, PeerType.PAINTER );
     readonly style = window.getComputedStyle( this.peer );
 

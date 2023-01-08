@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { doCombineConstraints, Interval1D } from '@metsci/gleam-core';
-import { AaTreeMap, Disposer, DisposerGroup, equal, FireableNotifier, ImmutableSet, LinkedSet, NOOP, NotifierBasic, ReadableAaNode, ReadableLinkedSet, ReadableTreeMap, requireDefined, requireEqual, TreeMap } from '@metsci/gleam-util';
+import { doCombineConstraints } from '@metsci/gleam-core';
+import { AaTreeMap, Disposer, DisposerGroup, equal, FireableNotifier, ImmutableSet, Interval1D, LinkedSet, NOOP, NotifierBasic, ReadableAaNode, ReadableLinkedSet, ReadableTreeMap, requireDefined, requireEqual, TreeMap } from '@metsci/gleam-util';
 
 const { max, min } = Math;
 const { POSITIVE_INFINITY, NEGATIVE_INFINITY } = Number;

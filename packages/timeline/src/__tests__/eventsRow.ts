@@ -26,8 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Interval1D } from '@metsci/gleam-core';
-import { SECONDS_PER_YEAR_APPROX, utcTimeToPsec } from '@metsci/gleam-util';
+import { Interval1D, SECONDS_PER_YEAR_APPROX, utcTimeToPsec } from '@metsci/gleam-util';
 import { EventImpl, EventsGroup, EventsLane, ReadableEvent, ReadableEventsLane } from '../contraptions/eventsRow';
 import { StringSet } from '../contraptions/eventsRow/painter/glyphsProgram';
 import { splitToMilliPrecision, splitToNanoPrecision } from '../contraptions/eventsRow/painter/misc';

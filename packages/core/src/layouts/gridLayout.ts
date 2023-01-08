@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { isNumber, LinkedSet, mapIterable, requireNonNullish, Supplier } from '@metsci/gleam-util';
+import { Interval1D, Interval2D, isNumber, LinkedSet, mapIterable, requireNonNullish, Size2D, Supplier } from '@metsci/gleam-util';
 import { LayoutBase, Pane } from '../core';
-import { cssBoolean, cssFloat, cssString, currentDpr, Interval1D, Interval2D, Size2D, StyleProp, UnboundStyleProp } from '../support';
+import { cssBoolean, cssFloat, cssString, currentDpr, StyleProp, UnboundStyleProp } from '../support';
 import { isstr } from '../util';
 
 export function getRowKey( pane: Pane ): string | undefined {
@@ -87,6 +87,27 @@ function replaceClassNames( element: Element, prefix: string, replacementSuffixe
     }
 }
 
+/**
+ * Arranges child panes based on their `grid-row--${rowKey}` and `grid-column--${columnKey}`
+ * CSS classes. Use the `setGridCoords()`, `setRowKey()`, and `setColumnKey()` convenience
+ * fns, or manage the class-list directly.
+ *
+ * Looks for panes whose row and column keys match the contents of its `visibleRowKeys` and
+ * `visibleColumnKeys` fields, which are set programmatically, not in CSS.
+ *
+ * The special key `ALL` means to cover all rows or all columns, and the special key `VIEWPORT`
+ * means to cover the full viewport height or full viewport width.
+ *
+ * By default, column widths and row heights are set to the preferred sizes of their contents.
+ * This can be overridden in CSS, by setting `--row-height` and `--column-width` properties
+ * on a child pane's site-in-parent. For example:
+ * ```css
+ * gleam-pane.some-specific-class > site-in-parent {
+ *   --column-width: rigid( 250px );
+ *   --row-height: rigid( 50px );
+ * }
+ * ```
+ */
 export class GridLayout extends LayoutBase {
     readonly topToBottom = StyleProp.create( this.style, '--top-to-bottom', cssBoolean, false );
     readonly gapBetweenRows_LPX = StyleProp.create( this.style, '--gap-between-rows-px', cssFloat, 0 );
@@ -234,9 +255,9 @@ export function computeGridChildViewports_PX( dpr: number, viewport_PX: Interval
 }
 
 /**
- * Return value may be NaN.
+ * Return values may be NaN.
  *
- * Return value may not be an integer.
+ * Return values are not necessarily integers.
  */
 function parseSize_PX( s: any, dpr: number, viewportSize_PX: number, prefSize_PX: number ): number {
     if ( typeof( s ) !== 'string' ) {

@@ -78,7 +78,7 @@ export function addRow( timeline: HorizontalTimeline, key: string, name: string,
 /**
  * A contraption for expanding/collapsing a row.
  */
- export class RowSymbolLabel {
+export class RowSymbolLabel {
     readonly insetLayout = new InsetLayout( );
     readonly pane = new Pane( this.insetLayout );
     readonly style = window.getComputedStyle( this.pane.peer );

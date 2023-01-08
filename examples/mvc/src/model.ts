@@ -1,5 +1,5 @@
-import { CommonBoundsAxisGroup1D, CommonScaleAxisGroup1D, Interval1D } from '@metsci/gleam-core';
-import { BinaryReadableRef, equal, RefBasic, tripleEquals, UnaryReadableRef } from '@metsci/gleam-util';
+import { CommonBoundsAxisGroup1D, CommonScaleAxisGroup1D } from '@metsci/gleam-core';
+import { BinaryReadableRef, equal, Interval1D, RefBasic, tripleEquals, UnaryReadableRef } from '@metsci/gleam-util';
 import * as immutable from 'immutable';
 import { Dot, firstValue } from './misc';
 

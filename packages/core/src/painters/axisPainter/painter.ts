@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, atMost, clamp, equal, findIndexNearest, Nullable, numberOr, RefBasic, requireEqual, requireTrue, run, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { appendChild, atMost, clamp, equal, findIndexNearest, Interval1D, Interval2D, Nullable, numberOr, RefBasic, requireEqual, requireTrue, run, Size2D, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { Axis1D, AxisLabelSet, Context, Painter, texImage2D, Ticker } from '../../core';
-import { createDomPeer, cssColor, cssFloat, cssString, currentDpr, EAST, Edge, enablePremultipliedAlphaBlending, getGlyphCount, getTextWidth, GL, glUniformRgba, Interval1D, Interval2D, NORTH, PeerType, pushBufferToDevice_BYTES, putAlignedBox, putTextCoords, Size2D, SOUTH, StyleProp, TextAtlasCache, ValueBase2, WEST, xPixelToNdc, yUpwardPixelToNdc } from '../../support';
+import { createDomPeer, cssColor, cssFloat, cssString, currentDpr, EAST, Edge, enablePremultipliedAlphaBlending, getGlyphCount, getTextWidth, GL, glUniformRgba, NORTH, PeerType, pushBufferToDevice_BYTES, putAlignedBox, putTextCoords, SOUTH, StyleProp, TextAtlasCache, ValueBase2, WEST, xPixelToNdc, yUpwardPixelToNdc } from '../../support';
 
 import markFragShader_GLSL from './mark.frag';
 import markVertShader_GLSL from './mark.vert';
@@ -255,7 +255,7 @@ export class AxisPainter implements Painter {
 
             // Repopulate device text atlas, if necessary
             const hTextAtlas = this.hTextAtlasCache.get( textFont, dpr, context.frameNum );
-            const dTextAtlas = context.getTexture( `gleam.Axis.Text.${textFont}`, dpr, ( gl, target ) => {
+            const dTextAtlas = context.getTexture( `gleam.Axis.Text.${textFont}`, [ dpr ], ( gl, target ) => {
                 gl.texParameteri( target, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
                 gl.texParameteri( target, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
                 gl.texParameteri( target, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE );

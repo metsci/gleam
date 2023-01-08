@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ActivityListenableBasic, addToActiveTxn, Disposer, DisposerGroup, equal, FireableListenable, IMMEDIATE, isDefined, isNonNullish, newImmutableList, Nullable, Ref, RefBasic, Runnable, Supplier, tripleEquals, trunc } from '@metsci/gleam-util';
-import { currentDpr, Interval1D, X, Y } from '../support';
+import { ActivityListenableBasic, addToActiveTxn, Disposer, DisposerGroup, equal, Interval1D, isDefined, isNonNullish, newImmutableList, Nullable, Ref, Runnable, Supplier, trunc, X, Y } from '@metsci/gleam-util';
+import { currentDpr } from '../support';
 import { frozenSupplier } from '../util';
 import { AxisGroup1D, AxisState1D } from './axisGroup';
 import { DragHandler, HoverHandler, InputHandler, Pane, PaneMouseEvent, WheelHandler } from './pane';
@@ -160,7 +160,7 @@ export class Axis1D {
         this.groupMembership.dispose( );
 
         this.group = group;
-        this.groupMembership.add( this.group.addMember( this ) );
+        this.groupMembership.add( this.group._addMember( this ) );
         this.groupMembership.add( this.group.changes.addListener( ongoing => {
             this.changes.fire( ongoing );
         } ) );

@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { LinkedSet } from '@metsci/gleam-util';
+import { Interval2D, LinkedSet, Size2D } from '@metsci/gleam-util';
 import { Layout, LayoutPrepFn, Pane } from '../core';
-import { createDomPeer, cssFloat, currentDpr, Interval2D, PeerType, Size2D, StyleProp } from '../support';
+import { createDomPeer, cssFloat, currentDpr, PeerType, StyleProp } from '../support';
 
 /**
  * Simple layout for panes that have no child panes.

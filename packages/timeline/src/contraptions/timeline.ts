@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { attachAxisInputHandlers1D, attachAxisViewportUpdater1D, Axis1D, ChildlessLayout, ColumnsLayout, Context, createAxisCursorInputHandler1D, createDomPeer, createInset, cssColor, cssFloat, currentDpr, CursorPainter, DragHandler, EdgeAxisWidget, FillPainter, frozenSupplier, glViewport, GridLayout, HoverHandler, InputHandler, InsetLayout, Interval1D, Interval2D, LayoutPrepFn, NORTH, Painter, Pane, PaneMouseEvent, PeerType, Point2D, RowsLayout, setGridCoords, SOUTH, StyleProp, TextAtlasCache, TRANSPARENT, VerticalScrollbar, VerticalScrollerLayout, X } from '@metsci/gleam-core';
-import { appendChild, Disposer, DisposerGroup, findIndexAtOrAfter, FireableListenable, IMMEDIATE, isDefined, LinkedMap, LinkedSet, linkListenables, ListenableBasic, newImmutableList, Nullable, ReadableLinkedMap, Ref, RefBasic, requireDefined, tripleEquals } from '@metsci/gleam-util';
+import { attachAxisInputHandlers1D, attachAxisViewportUpdater1D, Axis1D, ChildlessLayout, ColumnsLayout, Context, createAxisCursorInputHandler1D, createDomPeer, createInset, cssColor, cssFloat, currentDpr, CursorPainter, DragHandler, EdgeAxisWidget, FillPainter, frozenSupplier, glViewport, GridLayout, HoverHandler, InputHandler, InsetLayout, LayoutPrepFn, NORTH, Painter, Pane, PaneMouseEvent, PeerType, RowsLayout, setGridCoords, SOUTH, StyleProp, TextAtlasCache, TRANSPARENT, VerticalScrollbar, VerticalScrollerLayout } from '@metsci/gleam-core';
+import { appendChild, Disposer, DisposerGroup, findIndexAtOrAfter, FireableListenable, IMMEDIATE, Interval1D, Interval2D, isDefined, LinkedMap, LinkedSet, linkListenables, ListenableBasic, newImmutableList, Nullable, Point2D, ReadableLinkedMap, Ref, RefBasic, requireDefined, tripleEquals, X } from '@metsci/gleam-util';
 import { TimeTicker } from '../ticker';
 
 export interface TimelineRow {
@@ -454,7 +454,7 @@ export class HorizontalTimeline {
                         if ( timeline.isRowExpanded( key ) && timeline.getChildRows( key ).size > 0 ) {
                             // Redo the layout first, so newly expanded rows have valid
                             // viewports, and scrollLayout has a valid content height
-                            timeline.pane.doLayout( );
+                            timeline.pane._doLayout( );
                             const section_PX = timeline.getRowsInterval_PX( timeline.getRowDescendants( key ) );
                             if ( section_PX ) {
                                 // We got a mouse click on the section's top row, so that row must

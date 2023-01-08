@@ -17,6 +17,7 @@ nbproject/
 
 # Visual Studio Code
 *.code-workspace
+.vscode/launch.json
 
 # Mac
 .DS_Store

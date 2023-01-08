@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ActivityListenable, clamp, CowArray, doTxn, equal, findIndexNearest, ImmutableMap, isDefined, isUndefined, newImmutableMap, newImmutableSet, NOOP, Nullable, Ref, RefBasic, RefDerived, requireDefined, _addOldNewActivityListener } from '@metsci/gleam-util';
-import { Interval1D, ModifierSet, X, Y } from '../support';
+import { ActivityListenable, clamp, CowArray, doTxn, equal, findIndexNearest, ImmutableMap, Interval1D, isDefined, isUndefined, newImmutableMap, newImmutableSet, NOOP, Nullable, Ref, RefBasic, RefDerived, requireDefined, X, Y, _addOldNewActivityListener } from '@metsci/gleam-util';
+import { ModifierSet } from '../support';
 import { frozenSupplier } from '../util';
 import { Axis1D, getMouseAxisCoord1D, ZOOM_STEP_FACTOR } from './axis1d';
 import { DragHandler, HoverHandler, InputHandler, PaneMouseEvent, WheelHandler } from './pane';
@@ -134,7 +134,7 @@ export class TagMap implements Iterable<Tag> {
     requireTag( key: string ): Tag {
         const tag = this.getTag( key );
         if ( isUndefined( tag ) ) {
-            throw new Error( 'Tag not found: key = "' + key + '"' );
+            throw new Error( `Tag not found: key = "${key}"` );
         }
         return tag;
     }
@@ -146,7 +146,7 @@ export class TagMap implements Iterable<Tag> {
     requireCoord( key: string ): number {
         const coord = this.getCoord( key );
         if ( isUndefined( coord ) ) {
-            throw new Error( 'Tag not found: key = "' + key + '"' );
+            throw new Error( `Coord not found: key = "${key}"` );
         }
         return coord;
     }
@@ -303,12 +303,15 @@ export function createTagsInputHandler1D( axis: Axis1D, axisType: X | Y, tags: T
                 const grabCoord = getMouseAxisCoord1D( axis, axisType, evGrab );
                 const tag = tags.findNearest( grabCoord, axis.bounds );
                 if ( tag ) {
-                    // With offset as a constant axis distance, things get weird if you zoom way in
-                    // while dragging. We wouldn't have that issue if offset were a pixel distance.
-                    // However, pixel offset has its own problem: the dragged object's axis coord
-                    // changes, which feels wrong, and gets more noticeable as you zoom OUT. When a
-                    // dragged object is linked to stuff shown on other plots, this movement in axis
-                    // space feels especially bad. So the offset here is a constant axis distance.
+                    // Offset here is a constant AXIS distance. This feels a little weird if you zoom
+                    // way in while dragging. That's rarely done in practice, though.
+                    //
+                    // The alternative would be to make the offset a constant PIXEL distance, which
+                    // wouldn't have the issue described above. However, it would have its own problem:
+                    // the dragged object's axis coord would change, which feels very wrong, and gets
+                    // increasingly noticeable as you zoom OUT. This effect feels especially bad when
+                    // the dragged object's axis coord affects content shown on other plots.
+                    //
                     const grabOffset = grabCoord - tag.coord.v;
                     if ( Math.abs( grabOffset ) <= tagGrabDistance_LPX / axis.scale ) {
                         return {

@@ -26,8 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ActivityListenable, ActivityListenableSet, Disposer, DisposerGroup, doTxn, newImmutableList, Nullable, trunc } from '@metsci/gleam-util';
-import { Interval1D, Interval2D, Point2D, X, x, Y, y } from '../support';
+import { ActivityListenable, ActivityListenableSet, Disposer, DisposerGroup, doTxn, Interval1D, Interval2D, newImmutableList, Nullable, Point2D, trunc, X, x, Y, y } from '@metsci/gleam-util';
 import { frozenSupplier } from '../util';
 import { attachAxisViewportUpdater1D, Axis1D, PSEUDOWHEEL_STEP_LPX, ZOOM_STEP_FACTOR } from './axis1d';
 import { DragHandler, HoverHandler, InputHandler, Pane, PaneMouseEvent, WheelHandler } from './pane';
@@ -286,4 +285,9 @@ export function getMouseAxisFrac2D( axis: Axis2D, ev: PaneMouseEvent ): Point2D 
         axis.x.viewport_PX.valueToFrac( ev.loc_PX.x ),
         axis.y.viewport_PX.valueToFrac( ev.loc_PX.y ),
     );
+}
+
+export function getMouseAxisCoord2D( axis: Axis2D, ev: PaneMouseEvent ): Point2D {
+    const frac = getMouseAxisFrac2D( axis, ev );
+    return axis.bounds.fracToValue( frac );
 }

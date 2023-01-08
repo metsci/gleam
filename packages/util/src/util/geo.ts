@@ -57,14 +57,15 @@ export interface NormalCylindricalProjection {
     readonly compatibleCrsKeys: ReadonlySet<string>;
 
     readonly originLon_RAD: number;
+    readonly xSpan: number;
+    readonly minUsableY: number;
+    readonly maxUsableY: number;
 
     xToLon_RAD( x: number ): number;
     yToLat_RAD( y: number ): number;
 
     lonToX( lon_RAD: number ): number;
     latToY( lat_RAD: number ): number;
-
-    xSpan( ): number;
 
     /**
      * Derivative of lat_RAD with respect to dy (i.e. dLat/dY), at the given y.
@@ -75,9 +76,6 @@ export interface NormalCylindricalProjection {
      * Maximum value of dLat/dY over all y values in [yMin,yMax].
      */
     maxDLatDY_RAD( yMin?: number, yMax?: number ): number;
-
-    minUsableY( ): number;
-    maxUsableY( ): number;
 }
 
 export class EquirectNormalCylindricalProjection implements NormalCylindricalProjection {
@@ -91,6 +89,9 @@ export class EquirectNormalCylindricalProjection implements NormalCylindricalPro
 
     readonly name: string;
     readonly desc: Readonly<NormalCylindricalProjectionDescriptor>;
+    readonly xSpan: number;
+    readonly minUsableY: number;
+    readonly maxUsableY: number;
     protected readonly xToRad: number;
     protected readonly yToRad: number;
 
@@ -108,6 +109,9 @@ export class EquirectNormalCylindricalProjection implements NormalCylindricalPro
             type: 'Equirect',
             params: [ originLon_RAD, radToX, radToY ],
         } );
+        this.xSpan = 2*PI*this.radToX;
+        this.minUsableY = -HALF_PI*this.radToY;
+        this.maxUsableY = +HALF_PI*this.radToY;
         this.xToRad = 1.0 / this.radToX;
         this.yToRad = 1.0 / this.radToY;
     }
@@ -120,10 +124,6 @@ export class EquirectNormalCylindricalProjection implements NormalCylindricalPro
     lonToX( lon_RAD: number ): number {
         const x_RAD = lon_RAD - this.originLon_RAD;
         return ( x_RAD*this.radToX );
-    }
-
-    xSpan( ): number {
-        return 2*PI*this.radToX;
     }
 
     yToLat_RAD( y: number ): number {
@@ -143,14 +143,6 @@ export class EquirectNormalCylindricalProjection implements NormalCylindricalPro
     maxDLatDY_RAD( ): number {
         return this.yToRad;
     }
-
-    minUsableY( ): number {
-        return -HALF_PI*this.radToY;
-    }
-
-    maxUsableY( ): number {
-        return +HALF_PI*this.radToY;
-    }
 }
 
 export class MercatorNormalCylindricalProjection implements NormalCylindricalProjection {
@@ -166,6 +158,9 @@ export class MercatorNormalCylindricalProjection implements NormalCylindricalPro
 
     readonly name: string;
     readonly desc: Readonly<NormalCylindricalProjectionDescriptor>;
+    readonly xSpan: number;
+    readonly minUsableY: number;
+    readonly maxUsableY: number;
 
     /**
      * `yCutoff` defaults to `PI`, which is reasonable in practice and makes
@@ -180,6 +175,9 @@ export class MercatorNormalCylindricalProjection implements NormalCylindricalPro
             type: 'Mercator',
             params: [ originLon_RAD, yCutoff ],
         } );
+        this.xSpan = 2*PI;
+        this.minUsableY = -1.0 * this.yCutoff;
+        this.maxUsableY = +1.0 * this.yCutoff
     }
 
     xToLon_RAD( x: number ): number {
@@ -188,10 +186,6 @@ export class MercatorNormalCylindricalProjection implements NormalCylindricalPro
 
     lonToX( lon_RAD: number ): number {
         return ( lon_RAD - this.originLon_RAD );
-    }
-
-    xSpan( ): number {
-        return 2*PI;
     }
 
     yToLat_RAD( y: number ): number {
@@ -235,14 +229,6 @@ export class MercatorNormalCylindricalProjection implements NormalCylindricalPro
             return this.getDLatDY_RAD( yMax );
         }
     }
-
-    minUsableY( ): number {
-        return ( -1.0 * this.yCutoff );
-    }
-
-    maxUsableY( ): number {
-        return ( +1.0 * this.yCutoff );
-    }
 }
 
 export const EQUIRECT_PROJ_RAD = new EquirectNormalCylindricalProjection( 0.0, 1.0 );
@@ -260,6 +246,16 @@ export function builtinProjectionFromDescriptor( desc: NormalCylindricalProjecti
 export interface LatLon {
     lat_RAD: number;
     lon_RAD: number;
+}
+
+export namespace LatLon {
+    export function fromRad( lat_RAD: number, lon_RAD: number ): LatLon {
+        return { lat_RAD, lon_RAD };
+    }
+
+    export function fromDeg( lat_DEG: number, lon_DEG: number ): LatLon {
+        return fromRad( lat_DEG*DEG_TO_RAD, lon_DEG*DEG_TO_RAD );
+    }
 }
 
 export interface LatLonInterpolatorDescriptor {
@@ -317,7 +313,7 @@ export const SPHERICAL_RHUMB_LINE_INTERPOLATOR: LatLonInterpolator = Object.free
         // TODO: Is there a more efficient way to implement this?
         const [ xA, yA ] = latLonToXy( MERCATOR_PROJ, A );
         const [ xRawB, yB ] = latLonToXy( MERCATOR_PROJ, B );
-        const xB = wrapNear( xRawB, xA, MERCATOR_PROJ.xSpan( ) );
+        const xB = wrapNear( xRawB, xA, MERCATOR_PROJ.xSpan );
         return ( fracAB: number ) => {
             const x = xA + fracAB*( xB - xA );
             const y = yA + fracAB*( yB - yA );
@@ -359,7 +355,7 @@ export function projectLatLonSegment(
     perceptibleProjDist: number,
     includeB: boolean,
 ): Array<Xy> {
-    const xWrapSpan = proj.xSpan( );
+    const xWrapSpan = proj.xSpan;
     const perceptibleProjDistSq = perceptibleProjDist*perceptibleProjDist;
 
     const interpolate = interp.getInterpFn( A, B );

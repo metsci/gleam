@@ -26,11 +26,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, arrayRemoveFirst, arrayRemoveLast, arraySortStable, Consumer, Disposer, DisposerGroup, DisposerGroupMap, equal, FireableListenable, FireableNotifier, IMMEDIATE, ImmutableSet, isDefined, isNonNullish, isNullish, isNumber, LinkedSet, mapAdd, mapRequire, mapSetIfAbsent, newImmutableSet, NOOP, NotifierBasic, Nullable, Predicate, ReadableRef, Ref, RefBasic, requireNonNullish, run, Runnable, StringTuple, Supplier } from '@metsci/gleam-util';
+import { appendChild, arrayAllEqual, arrayRemoveFirst, arrayRemoveLast, arraySortStable, Consumer, Disposer, DisposerGroup, DisposerGroupMap, equal, FireableListenable, FireableNotifier, IMMEDIATE, ImmutableSet, Interval2D, isDefined, isNonNullish, isNullish, isNumber, LinkedSet, mapAdd, mapRequire, mapSetIfAbsent, newImmutableSet, NOOP, NotifierBasic, Nullable, Point2D, Predicate, ReadableRef, Ref, RefBasic, requireNonNullish, run, Runnable, Size2D, StringTuple, Supplier } from '@metsci/gleam-util';
 import { ChildlessLayout } from '../layouts/childlessLayout';
 import { BorderPainter } from '../painters/borderPainter';
 import { FillPainter } from '../painters/fillPainter';
-import { attachCanvasResizeListener, attachSubtreeRestyleListener, CET_L01, ColorTablePopulator, COLOR_TABLE_INVERTER, createDomPeer, currentDpr, DomPeer, drawingBufferBounds, getModifiers, getMouseLoc_PX, GL, glScissor, glViewport, Interval2D, isDomPeer, isStyleProp, isUnboundStyleProp, MAGMA, ModifierSet, PeerType, Point2D, pointsEqual2D, setCssClassPresent, ShaderProgram, ShaderSource, Size2D } from '../support';
+import { attachCanvasResizeListener, attachSubtreeRestyleListener, CET_L01, ColorTablePopulator, COLOR_TABLE_INVERTER, createDomPeer, currentDpr, DomPeer, drawingBufferBounds, getModifiers, getMouseLoc_PX, GL, glScissor, glViewport, isDomPeer, isStyleProp, isUnboundStyleProp, MAGMA, ModifierSet, PeerType, setCssClassPresent, ShaderProgram, ShaderSource } from '../support';
 import { ArrayWithZIndices, attachEventListener, isfn, isobj } from '../util';
 import { mergePreSortedLists, NotifierTree } from '../util/notifierTree';
 import { BufferInfo, BufferInit, BufferMeta, Context, TextureInfo, TextureInit, TextureMeta } from './context';
@@ -145,7 +145,7 @@ export interface WheelHandler {
     /**
      * Passed to input spectators. The wheel is treated as separate from
      * hover/drag and focus, and there are no begin/end wheel notifications
-     * analogous to hover/unhover, drag/undrag, and focus/unfocus.
+     * analogous to hover/unhover, grab/ungrab, and focus/unfocus.
      */
     readonly target: unknown;
 
@@ -403,8 +403,17 @@ export class Pane {
     }
 
     setPainterZIndex( painter: Painter, zIndex: number ): void {
+        this.appendPainterToZIndex( painter, zIndex );
+    }
+
+    prependPainterToZIndex( painter: Painter, zIndex: number ): void {
         const paintFn = mapRequire( this.paintFnsByPainter, painter );
-        this.paintFns.setZIndex( paintFn, zIndex );
+        this.paintFns.prependToZIndex( paintFn, zIndex );
+    }
+
+    appendPainterToZIndex( painter: Painter, zIndex: number ): void {
+        const paintFn = mapRequire( this.paintFnsByPainter, painter );
+        this.paintFns.appendToZIndex( paintFn, zIndex );
     }
 
     addInputHandler( inputHandler: InputHandler, zIndex: number = 0 ): Disposer {
@@ -428,7 +437,15 @@ export class Pane {
     }
 
     setInputHandlerZIndex( inputHandler: InputHandler, zIndex: number ): void {
-        this.inputHandlers.setZIndex( inputHandler, zIndex );
+        this.appendInputHandlerToZIndex( inputHandler, zIndex );
+    }
+
+    prependInputHandlerToZIndex( inputHandler: InputHandler, zIndex: number ): void {
+        this.inputHandlers.prependToZIndex( inputHandler, zIndex );
+    }
+
+    appendInputHandlerToZIndex( inputHandler: InputHandler, zIndex: number ): void {
+        this.inputHandlers.appendToZIndex( inputHandler, zIndex );
     }
 
     addPane( child: Pane, zIndex: number = 0 ): Disposer {
@@ -495,9 +512,19 @@ export class Pane {
     }
 
     setPaneZIndex( pane: Pane, zIndex: number ): void {
+        this.appendPaneToZIndex( pane, zIndex );
+    }
+
+    prependPaneToZIndex( pane: Pane, zIndex: number ): void {
         const paintFn = mapRequire( this.paintFnsByPane, pane );
-        this.paintFns.setZIndex( paintFn, zIndex );
-        this.inputHandlers.setZIndex( pane, zIndex );
+        this.paintFns.prependToZIndex( paintFn, zIndex );
+        this.inputHandlers.prependToZIndex( pane, zIndex );
+    }
+
+    appendPaneToZIndex( pane: Pane, zIndex: number ): void {
+        const paintFn = mapRequire( this.paintFnsByPane, pane );
+        this.paintFns.appendToZIndex( paintFn, zIndex );
+        this.inputHandlers.appendToZIndex( pane, zIndex );
     }
 
     // TODO: Maybe replace with an enum like VISIBLE, BLANK, ABSENT
@@ -534,7 +561,7 @@ export class Pane {
      * to change a setting, then (without rendering) check how the layout
      * has changed.
      */
-    doLayout( bounds?: Interval2D ): void {
+    _doLayout( bounds?: Interval2D ): void {
         bounds = bounds ?? this.getViewport_PX( );
         this.prepForLayout( );
         this.updatePrefSizes( );
@@ -543,8 +570,8 @@ export class Pane {
 
     /**
      * Recursively layout and paint this pane and its descendants to fill
-     * the supplied context. This method should only be called on the top-
-     * level pane within a canvas.
+     * the supplied context. This method is only intended to be called on
+     * the top-level pane within a canvas.
      */
     render( context: Context ): void {
         // Pending actions
@@ -574,7 +601,7 @@ export class Pane {
 
     /**
      * Enqueues the given action to run the next time a context is current.
-     * Handy when non-rendering code need to make sure a GL resource gets
+     * Handy when non-rendering code needs to make sure a GL resource gets
      * disposed.
      */
     doLaterWithContext( contextAction: Consumer<Context> ): void {
@@ -602,8 +629,8 @@ export class Pane {
     }
 
     /**
-     * Convenience for application code that needs to access the part of the
-     * DOM that contains a pane. This is unusual but not unheard of.
+     * Convenience method for application code that needs to access the part
+     * of the DOM that contains a pane.
      *
      * See also `Pane.canvasChanged`.
      */
@@ -612,7 +639,7 @@ export class Pane {
     }
 
     /**
-     * For internal use only.
+     * Intended for internal use only.
      */
     _setCanvas( canvas: HTMLCanvasElement ): Disposer {
         if ( this.canvas ) {
@@ -798,13 +825,13 @@ interface ProgramCacheEntry {
 }
 
 interface TextureCacheEntry {
-    inputs: unknown;
+    inputs: ReadonlyArray<unknown>;
     info: TextureInfo<TextureMeta>;
     lastAccessFrameNum: number;
 }
 
 interface BufferCacheEntry {
-    inputs: unknown;
+    inputs: ReadonlyArray<unknown>;
     info: BufferInfo<BufferMeta>;
     lastAccessFrameNum: number;
 }
@@ -897,10 +924,10 @@ class ContextImpl implements Context {
         }
     }
 
-    getTexture<M extends TextureMeta>( key: string, inputs: unknown, init: TextureInit<M> ): TextureInfo<M> {
+    getTexture<M extends TextureMeta>( key: string, inputs: ReadonlyArray<unknown>, init: TextureInit<M> ): TextureInfo<M> {
         this.pruneTextureCache( );
         let en = this.textureCache.get( key );
-        if ( !en || !equal( inputs, en.inputs ) ) {
+        if ( !en || !arrayAllEqual( inputs, en.inputs, equal ) ) {
             const texture = this.gl.createTexture( );
             this.gl.bindTexture( GL.TEXTURE_2D, texture );
             const meta = init( this.gl, GL.TEXTURE_2D );
@@ -935,10 +962,10 @@ class ContextImpl implements Context {
         }
     }
 
-    getBuffer<M extends BufferMeta>( key: string, inputs: unknown, init: BufferInit<M> ): BufferInfo<M> {
+    getBuffer<M extends BufferMeta>( key: string, inputs: ReadonlyArray<unknown>, init: BufferInit<M> ): BufferInfo<M> {
         this.pruneBufferCache( );
         let en = this.bufferCache.get( key );
-        if ( !en || !equal( inputs, en.inputs ) ) {
+        if ( !en || !arrayAllEqual( inputs, en.inputs, equal ) ) {
             const buffer = this.gl.createBuffer( );
             this.gl.bindBuffer( GL.ARRAY_BUFFER, buffer );
             const meta = init( this.gl, GL.ARRAY_BUFFER );
@@ -1025,7 +1052,15 @@ export const DEFAULT_CANVAS_PROVIDER: CanvasProvider = {
  * wish to reuse canvases via a canvas pool, to avoid hitting browser limits on the number
  * of GL contexts.
  */
-export function attachPane( host: HTMLElement, pane: Pane, repaint: FireableListenable, canvasProvider?: CanvasProvider ): Disposer {
+export function attachPane(
+    host: HTMLElement,
+    pane: Pane,
+    repaint: FireableListenable,
+    options?: {
+        canvasProvider?: CanvasProvider,
+        glContextAttrs?: WebGLContextAttributes,
+    },
+): Disposer {
     const disposers = new DisposerGroup( );
 
     if ( hosts.has( host ) ) {
@@ -1049,10 +1084,23 @@ export function attachPane( host: HTMLElement, pane: Pane, repaint: FireableList
         throw new Error( 'Browser does not support WebGL' );
     }
 
+    const glContextAttrs: WebGLContextAttributes = {
+        alpha: true,
+        depth: false,
+        stencil: false,
+        antialias: false,
+        premultipliedAlpha: true,
+        preserveDrawingBuffer: false,
+        powerPreference: 'default',
+        failIfMajorPerformanceCaveat: false,
+        desynchronized: false,
+        ...( options?.glContextAttrs ?? {} ),
+    };
+
     function createCanvas( ): [ HTMLCanvasElement, WebGLRenderingContext ] {
         const numAttempts = 3;
         for ( let i = 0; i < numAttempts; i++ ) {
-            const canvas = ( canvasProvider ?? DEFAULT_CANVAS_PROVIDER ).claimNext( );
+            const canvas = ( options?.canvasProvider ?? DEFAULT_CANVAS_PROVIDER ).claimNext( );
 
             // Apply basic styling here so there's less flicker when CSS loading isn't instantaneous
             canvas.style.border = '0';
@@ -1062,17 +1110,7 @@ export function attachPane( host: HTMLElement, pane: Pane, repaint: FireableList
             canvas.style.height = '100%';
             canvas.style.display = 'block';
 
-            const gl = canvas.getContext( 'webgl', {
-                alpha: true,
-                depth: false,
-                stencil: false,
-                antialias: false,
-                premultipliedAlpha: true,
-                preserveDrawingBuffer: false,
-                powerPreference: 'default',
-                failIfMajorPerformanceCaveat: false,
-                desynchronized: false,
-            } );
+            const gl = canvas.getContext( 'webgl', glContextAttrs );
             if ( gl ) {
                 if ( i > 0 ) {
                     console.info( 'WebGL context creation succeeded on attempt ' + i );
@@ -1159,7 +1197,7 @@ export function attachPane( host: HTMLElement, pane: Pane, repaint: FireableList
 
             // Swap out the old canvas for the new one
             disposersForCanvases.disposeFor( context.canvas );
-            ( canvasProvider ?? DEFAULT_CANVAS_PROVIDER ).release( context.canvas );
+            ( options?.canvasProvider ?? DEFAULT_CANVAS_PROVIDER ).release( context.canvas );
             disposersForCanvases.get( canvas ).add( attachCanvas( wnd, canvas ) );
 
             // Update the gleam context
@@ -1308,21 +1346,6 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
         return new PaneKeyEvent( currentDpr( contentPane ), ...args );
     }
 
-    function fireUnhoverAndHover( newHoverHandler: Nullable<HoverHandler>, mouse_PX: Point2D, modifiers: ModifierSet ): void {
-        const oldHoverHandler = activeHover?.hoverHandler ?? null;
-        if ( !equal( newHoverHandler?.target, oldHoverHandler?.target ) ) {
-            const ev = createPaneMouseEvent( mouse_PX, modifiers );
-            if ( oldHoverHandler !== null ) {
-                contentPane.inputSpectators.fireUnhover( oldHoverHandler.target, ev );
-                oldHoverHandler.handleUnhover?.( );
-            }
-            if ( newHoverHandler !== null ) {
-                newHoverHandler.handleHover?.( );
-                contentPane.inputSpectators.fireHover( newHoverHandler.target, ev );
-            }
-        }
-    }
-
     function doMove( mouse_PX: Point2D, modifiers: ModifierSet ): void {
         if ( activeDrag !== null ) {
             throw new Error( );
@@ -1343,7 +1366,18 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
 
             const evMove = createPaneMouseEvent( mouse_PX, modifiers );
             const hoverHandler = contentPane.getHoverHandler( evMove );
-            fireUnhoverAndHover( hoverHandler, mouse_PX, modifiers );
+            const oldHoverHandler = activeHover?.hoverHandler ?? null;
+            if ( !equal( hoverHandler?.target, oldHoverHandler?.target ) ) {
+                const ev = createPaneMouseEvent( mouse_PX, modifiers );
+                if ( oldHoverHandler !== null ) {
+                    contentPane.inputSpectators.fireUnhover( oldHoverHandler.target, ev );
+                    oldHoverHandler.handleUnhover?.( );
+                }
+                if ( hoverHandler !== null ) {
+                    hoverHandler.handleHover?.( );
+                    contentPane.inputSpectators.fireHover( hoverHandler.target, ev );
+                }
+            }
             cursorClasses.set( false, newImmutableSet( hoverHandler?.getMouseCursorClasses?.( ) ?? [] ) );
             activeHover = ( hoverHandler === null ? null : {
                 hoverHandler,
@@ -1359,7 +1393,9 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
             throw new Error( );
         }
         else if ( activeHover !== null ) {
-            fireUnhoverAndHover( null, activeHover.loc_PX, ModifierSet.EMPTY );
+            const ev = createPaneMouseEvent( activeHover.loc_PX, ModifierSet.EMPTY );
+            contentPane.inputSpectators.fireUnhover( activeHover.hoverHandler.target, ev );
+            activeHover.hoverHandler.handleUnhover?.( );
             cursorClasses.set( false, newImmutableSet( [] ) );
             activeHover = null;
         }
@@ -1383,24 +1419,39 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
 
             const evGrab = createPaneMouseEvent( mouse_PX, modifiers, button, pressCount );
 
-            const keyHandler = contentPane.getKeyHandler( evGrab );
-            if ( keyHandler !== null && !equal( keyHandler.target, activeFocus?.keyHandler.target ) ) {
-                if ( activeFocus !== null ) {
-                    activeFocus.keyHandler.handleUnfocus?.( );
-                    contentPane.inputSpectators.fireUnfocus( activeFocus.keyHandler.target );
+            // Call handleGrab before getKeyHandler, so any new focus target created by
+            // handleGrab will be eligible to receive focus immediately
+            let dragHandler: Nullable<DragHandler>;
+            const newDragHandler = contentPane.getDragHandler( evGrab );
+            const oldHoverHandler = activeHover?.hoverHandler ?? null;
+            if ( !equal( newDragHandler?.target, oldHoverHandler?.target ) ) {
+                const ev = createPaneMouseEvent( mouse_PX, modifiers );
+                if ( oldHoverHandler !== null ) {
+                    contentPane.inputSpectators.fireUnhover( oldHoverHandler.target, ev );
+                    oldHoverHandler.handleUnhover?.( );
                 }
-                activeFocus = ( keyHandler === null ? null : {
-                    keyHandler,
-                    keysDown: new Set( ),
-                } );
-                if ( activeFocus !== null ) {
-                    activeFocus.keyHandler.handleFocus?.( );
-                    contentPane.inputSpectators.fireFocus( activeFocus.keyHandler.target );
+                if ( newDragHandler !== null ) {
+                    newDragHandler.handleHover?.( );
+                    contentPane.inputSpectators.fireHover( newDragHandler.target, ev );
                 }
+                dragHandler = newDragHandler;
             }
-
-            const dragHandler = contentPane.getDragHandler( evGrab );
-            fireUnhoverAndHover( dragHandler, mouse_PX, modifiers );
+            else if ( oldHoverHandler && newDragHandler ) {
+                // The drag is a continutation of the hover because they have the same target,
+                // so combine the hover and drag handlers together into a single handler
+                dragHandler = { ...newDragHandler };
+                dragHandler.handleMove = evMove => {
+                    newDragHandler.handleMove?.( evMove );
+                    oldHoverHandler.handleMove?.( evMove );
+                };
+                dragHandler.handleUnhover = ( ) => {
+                    newDragHandler.handleUnhover?.( );
+                    oldHoverHandler.handleUnhover?.( );
+                };
+            }
+            else {
+                dragHandler = newDragHandler;
+            }
             cursorClasses.set( false, newImmutableSet( dragHandler?.getMouseCursorClasses?.( ) ?? [] ) );
             dragClasses.set( false, EMPTY_CLASSES );
             const newWheelHandler = contentPane.getWheelHandler( evGrab );
@@ -1418,6 +1469,23 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
             } );
             activeDrag?.dragHandler.handleGrab?.( );
             contentPane.inputSpectators.fireGrab( activeDrag?.dragHandler.target, evGrab );
+
+            // Call getKeyHandler after handleGrab, for reasons described above
+            const keyHandler = contentPane.getKeyHandler( evGrab );
+            if ( keyHandler !== null && !equal( keyHandler.target, activeFocus?.keyHandler.target ) ) {
+                if ( activeFocus !== null ) {
+                    activeFocus.keyHandler.handleUnfocus?.( );
+                    contentPane.inputSpectators.fireUnfocus( activeFocus.keyHandler.target );
+                }
+                activeFocus = ( keyHandler === null ? null : {
+                    keyHandler,
+                    keysDown: new Set( ),
+                } );
+                if ( activeFocus !== null ) {
+                    activeFocus.keyHandler.handleFocus?.( );
+                    contentPane.inputSpectators.fireFocus( activeFocus.keyHandler.target );
+                }
+            }
         }
     }
 
@@ -1493,7 +1561,7 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
             throw new Error( );
         }
         else if ( isButtonDown( buttonsDown, activeDrag.button ) ) {
-            if ( !pointsEqual2D( mouse_PX, activeDrag.loc_PX ) || !equal( modifiers, activeDrag.currModifiers ) ) {
+            if ( !equal( mouse_PX, activeDrag.loc_PX ) || !equal( modifiers, activeDrag.currModifiers ) ) {
                 doDrag( mouse_PX, modifiers );
             }
         }
@@ -1562,6 +1630,7 @@ export function attachPaneInputListeners( wnd: Window, canvas: HTMLCanvasElement
         }
     } ) );
 
+    // TODO: Auto-repeat with more than one key involved has inconvenient behavior
     // Refresh hovered grabber when modifiers change
     disposers.add( attachEventListener( wnd, 'keydown', false, ev => {
         if ( activeDrag !== null ) {

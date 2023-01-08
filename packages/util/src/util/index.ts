@@ -32,6 +32,7 @@ export * from './disposer';
 export * from './dom';
 export * from './geo';
 export * from './immutable';
+export * from './interval';
 export * from './linked';
 export * from './misc';
 export * from './splitString';

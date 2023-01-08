@@ -1,6 +1,6 @@
 # Timeline Example
 
-Use the `HorizontalTimeline` [contraption](../../docs/core.md#contraption) to display a multi-row timeline.
+Uses the `HorizontalTimeline` [contraption](../../docs/core.md#contraption) to display a multi-row timeline.
 
 In the events row:
  - Select events by clicking on them

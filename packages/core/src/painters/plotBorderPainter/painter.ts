@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { equal, Nullable, RefBasic, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { equal, Interval2D, Nullable, RefBasic, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { Context, Painter } from '../../core';
-import { createDomPeer, cssColor, cssFloat, currentDpr, disableBlending, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, GL, glUniformInterval2D, glUniformRgba, Interval2D, PeerType, pushBufferToDevice_BYTES, put4f, StyleProp, ValueBase2 } from '../../support';
+import { createDomPeer, cssColor, cssFloat, currentDpr, disableBlending, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, GL, glUniformInterval2D, glUniformRgba, PeerType, pushBufferToDevice_BYTES, put4f, StyleProp, ValueBase2 } from '../../support';
 
 import fragShader_GLSL from './shader.frag';
 import vertShader_GLSL from './shader.vert';

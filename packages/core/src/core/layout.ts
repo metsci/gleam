@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { LinkedSet } from '@metsci/gleam-util';
-import { createDomPeer, Interval2D, PeerType, Size2D, Styleable } from '../support';
+import { Interval2D, LinkedSet, Size2D } from '@metsci/gleam-util';
+import { createDomPeer, PeerType, Styleable } from '../support';
 import { Pane } from './pane';
 
 export interface ComputeChildViewportsFn {

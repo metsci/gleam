@@ -10,7 +10,7 @@ import pkg from './package.json';
 export default [ {
     input: new URL( './build/temp/painter/worker.js', import.meta.url ).pathname,
     external: [
-        // Bundle deps into the worker, but leave these out
+        // Bundle deps into the worker, but leave these out because the worker doesn't need them
         '@metsci/gleam-core',
     ],
     plugins: [

@@ -26,15 +26,39 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export const X = Symbol( 'X' );
-export type X = typeof X;
+import { nextDownFloat64, nextUpFloat64 } from '../util';
 
-export const Y = Symbol( 'Y' );
-export type Y = typeof Y;
+it( 'nextUpFloat64', function( ) {
+    expect( nextUpFloat64( 0 ) ).toBe( 4.9e-324 );
+    expect( nextUpFloat64( -4.9e-324 ) ).toBe( 0 );
 
-export function getOrthogonalDim( dim: X | Y ): Y | X {
-    switch ( dim ) {
-        case X: return Y;
-        case Y: return X;
-    }
-}
+    expect( nextUpFloat64( 1 ) ).toBe( 1.0000000000000002 );
+    expect( nextUpFloat64( -1.0000000000000002 ) ).toBe( -1 );
+
+    expect( nextUpFloat64( -1 ) ).toBe( -0.9999999999999999 );
+    expect( nextUpFloat64( 0.9999999999999999 ) ).toBe( 1 );
+
+    expect( nextUpFloat64( Number.MAX_VALUE ) ).toBe( Number.POSITIVE_INFINITY );
+    expect( nextUpFloat64( -Number.POSITIVE_INFINITY ) ).toBe( -Number.MAX_VALUE );
+
+    expect( nextUpFloat64( 2.1219957905E-314 ) ).toBe( 2.121995791E-314 );
+    expect( nextUpFloat64( -2.121995791E-314 ) ).toBe( -2.1219957905E-314 );
+
+} );
+
+it( 'nextDownFloat64', function( ) {
+    expect( nextDownFloat64( 0 ) ).toBe( -4.9e-324 );
+    expect( nextDownFloat64( 4.9e-324 ) ).toBe( 0 );
+
+    expect( nextDownFloat64( 1 ) ).toBe( 0.9999999999999999 );
+    expect( nextDownFloat64( -0.9999999999999999 ) ).toBe( -1 );
+
+    expect( nextDownFloat64( -1 ) ).toBe( -1.0000000000000002 );
+    expect( nextDownFloat64( 1.0000000000000002 ) ).toBe( 1 );
+
+    expect( nextDownFloat64( Number.POSITIVE_INFINITY ) ).toBe( Number.MAX_VALUE );
+    expect( nextDownFloat64( -Number.MAX_VALUE ) ).toBe( -Number.POSITIVE_INFINITY );
+
+    expect( nextDownFloat64( 2.121995791E-314 ) ).toBe( 2.1219957905E-314 );
+    expect( nextDownFloat64( -2.1219957905E-314 ) ).toBe( -2.121995791E-314 );
+} );

@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { AnchoredImage, BLACK, bufferDataF32, BufferInfo, Color, Context, createDomPeer, cssBoolean, cssColor, cssFloat, cssString, currentDpr, DomPeer, enablePremultipliedAlphaBlending, Float32Scratch, frozenSupplier, GL, glUniformInterval2D, glUniformRgba, glUniformSize2D, Interval1D, Interval2D, isfn, isstr, Painter, PeerType, RED, rgb, rgba, StyleProp, texImage2D, ValueBase, vertexAttribPointer } from '@metsci/gleam-core';
-import { appendChild, arraySortStable, Comparator, createWorkerPool, Disposer, DisposerGroup, DisposerGroupMap, FireableListenable, LatLonInterpolator, LatLonInterpolatorDescriptor, LinkedMap, ListenableBasic, mapAdd, NormalCylindricalProjection, NormalCylindricalProjectionDescriptor, Nullable, RefBasic, requireNonNull, requireNonNullish, SPHERICAL_GREAT_CIRCLE_INTERPOLATOR, submitToWorkerPool, Supplier, tripleEquals, WGS84_EQUATORIAL_CIRCUMFERENCE_METERS, WorkerPool, WorkerPoolWorker } from '@metsci/gleam-util';
+import { AnchoredImage, BLACK, bufferDataF32, BufferInfo, Color, Context, createDomPeer, cssBoolean, cssColor, cssFloat, cssString, currentDpr, DomPeer, enablePremultipliedAlphaBlending, Float32Scratch, frozenSupplier, GL, glUniformInterval2D, glUniformRgba, glUniformSize2D, isfn, isstr, Painter, PeerType, RED, rgb, rgba, StyleProp, texImage2D, vertexAttribPointer } from '@metsci/gleam-core';
+import { appendChild, arraySortStable, Comparator, createWorkerPool, Disposer, DisposerGroup, DisposerGroupMap, FireableListenable, Interval1D, Interval2D, LatLonInterpolator, LatLonInterpolatorDescriptor, LinkedMap, ListenableBasic, mapAdd, NormalCylindricalProjection, NormalCylindricalProjectionDescriptor, Nullable, RefBasic, requireNonNull, requireNonNullish, SPHERICAL_GREAT_CIRCLE_INTERPOLATOR, submitToWorkerPool, Supplier, tripleEquals, WGS84_EQUATORIAL_CIRCUMFERENCE_METERS, WorkerPool, WorkerPoolWorker } from '@metsci/gleam-util';
 import { Feature, GeoJSON, Geometry } from 'geojson';
 import { createXSplitter, PreRenderable, RenderableScores, WorkerResult } from './support';
 
@@ -143,7 +143,7 @@ export class GeoJsonMarkerPin implements GeoJsonMarker {
         const strokeColor = this.strokeColor.get( );
         const dpr = currentDpr( this );
 
-        const dMarker = context.getTexture( `geojson-marker-pin.${instanceKey}`, new ValueBase( [ dpr, fillColor, strokeColor ] ), ( gl, target ) => {
+        const dMarker = context.getTexture( `geojson-marker-pin.${instanceKey}`, [ dpr, fillColor, strokeColor ], ( gl, target ) => {
             const hMarker = GeoJsonMarkerPin.drawImage( dpr, fillColor, strokeColor );
             gl.texParameteri( target, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
             gl.texParameteri( target, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
@@ -478,7 +478,7 @@ export class GeoJsonPainter implements Painter {
         preRenderDefaults?: GeoJsonPreRenderOptions,
     ) {
         this.viewProj = viewProj;
-        this.splitX = createXSplitter( this.viewProj.xSpan( ) );
+        this.splitX = createXSplitter( this.viewProj.xSpan );
         this.viewBoundsFn = viewBoundsFn ?? frozenSupplier( Interval2D.fromEdges( 0, 1, 0, 1 ) );
         this.preRenderDefaults = {
             interp: preRenderDefaults?.interp ?? SPHERICAL_GREAT_CIRCLE_INTERPOLATOR,
@@ -545,7 +545,7 @@ export class GeoJsonPainter implements Painter {
             const preRenderOptions2 = isfn( preRenderOptions ) ? preRenderOptions( geometry, props ) : preRenderOptions;
             const interp = preRenderOptions2?.interp ?? this.preRenderDefaults.interp;
             const perceptibleDistance_M = preRenderOptions2?.perceptibleDistance_M ?? this.preRenderDefaults.perceptibleDistance_M;
-            const perceptibleProjDist = perceptibleDistance_M * this.viewProj.xSpan( ) / WGS84_EQUATORIAL_CIRCUMFERENCE_METERS;
+            const perceptibleProjDist = perceptibleDistance_M * this.viewProj.xSpan / WGS84_EQUATORIAL_CIRCUMFERENCE_METERS;
 
             const preRenderables = await this.createPreRenderables( geometry, interp, this.viewProj, perceptibleProjDist );
             if ( canceled ) {
@@ -614,17 +614,15 @@ export class GeoJsonPainter implements Painter {
         if ( this.renderablesByDataKey.size > 0 ) {
             const painterKey = context.getObjectKey( this );
             const viewBounds = this.viewBoundsFn( );
-            const mapXBounds = Interval1D.fromEdges(
-                this.viewProj.lonToX( -PI ),
-                this.viewProj.lonToX( +PI ),
-            );
             // TODO: Support lines/polygons that wrap around more than once
             const xViewMin = viewBounds.xMin;
-            const xWrapSpan = this.viewProj.xSpan( );
-            const xWrapNumMin = floor( mapXBounds.valueToFrac( viewBounds.xMin ) - 1.0 );
-            const xWrapNumMax = floor( mapXBounds.valueToFrac( viewBounds.xMax ) + 1.0 );
+            const xWrapSpan = this.viewProj.xSpan;
+            // Renderables are wrapped near lon=0, so consider map bounds to be lon=[-PI,+PI)
+            const xMapBounds = Interval1D.fromRect( this.viewProj.lonToX( -PI ), xWrapSpan );
+            const xWrapNumMin = floor( xMapBounds.valueToFrac( viewBounds.xMin ) - 1.0 );
+            const xWrapNumMax = floor( xMapBounds.valueToFrac( viewBounds.xMax ) + 1.0 );
             const xWrapCount = xWrapNumMax - xWrapNumMin + 1;
-            const dViewportXMins = context.getBuffer( `geojson.${painterKey}.viewportXMins`, new ValueBase( xViewMin, xWrapSpan, xWrapNumMin, xWrapCount ), ( gl, target ) => {
+            const dViewportXMins = context.getBuffer( `geojson.${painterKey}.viewportXMins`, [ xViewMin, xWrapSpan, xWrapNumMin, xWrapCount ], ( gl, target ) => {
                 const xs2 = this.scratch.getTempSpace( 2*xWrapCount );
                 for ( let i = 0; i < xWrapCount; i++ ) {
                     const x = viewBounds.xMin - ( xWrapNumMin + i )*xWrapSpan;
@@ -677,10 +675,10 @@ export class GeoJsonPainter implements Painter {
         // Marker
         if ( marker ) {
             const dMarker = marker.getTexture( context );
-            const dVerticesA = context.getBuffer( `geojson.${painterKey}.marker.verticesA.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesA = context.getBuffer( `geojson.${painterKey}.marker.verticesA.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, pointsA3, 3 );
             } );
-            const dVerticesB = context.getBuffer( `geojson.${painterKey}.marker.verticesB.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesB = context.getBuffer( `geojson.${painterKey}.marker.verticesB.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, pointsB2, 2 );
             } );
             const { program, attribs, uniforms } = context.getProgram( MARKER_PROG_SOURCE );
@@ -726,7 +724,7 @@ export class GeoJsonPainter implements Painter {
 
         // Joins
         if ( color && color.a > 0 && width_PX > 1 ) {
-            const dVertices = context.getBuffer( `geojson.${painterKey}.line.points.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVertices = context.getBuffer( `geojson.${painterKey}.line.points.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, points3, 3 );
             } );
             const { program, attribs, uniforms } = context.getProgram( JOIN_PROG_SOURCE );
@@ -755,10 +753,10 @@ export class GeoJsonPainter implements Painter {
 
         // Segments
         if ( color && color.a > 0 && width_PX > 0 ) {
-            const dVerticesA = context.getBuffer( `geojson.${painterKey}.line.trianglesA.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesA = context.getBuffer( `geojson.${painterKey}.line.trianglesA.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, trianglesA3, 3 );
             } );
-            const dVerticesB = context.getBuffer( `geojson.${painterKey}.line.trianglesB.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesB = context.getBuffer( `geojson.${painterKey}.line.trianglesB.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, trianglesB2, 2 );
             } );
             const { program, attribs, uniforms } = context.getProgram( LINE_PROG_SOURCE );
@@ -803,7 +801,7 @@ export class GeoJsonPainter implements Painter {
 
         // Fill
         if ( fillColor && fillColor.a > 0 ) {
-            const dVertices = context.getBuffer( `geojson.${painterKey}.polygon.fillTriangles.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVertices = context.getBuffer( `geojson.${painterKey}.polygon.fillTriangles.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, fillTriangles3, 3 );
             } );
             const { program, attribs, uniforms } = context.getProgram( FILL_PROG_SOURCE );
@@ -830,7 +828,7 @@ export class GeoJsonPainter implements Painter {
 
         // Stroke joins
         if ( strokeColor && strokeColor.a > 0 && strokeWidth_PX > 1 ) {
-            const dVertices = context.getBuffer( `geojson.${painterKey}.polygon.strokePoints.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVertices = context.getBuffer( `geojson.${painterKey}.polygon.strokePoints.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, strokePoints3, 3 );
             } );
             const { program, attribs, uniforms } = context.getProgram( JOIN_PROG_SOURCE );
@@ -859,10 +857,10 @@ export class GeoJsonPainter implements Painter {
 
         // Stroke segments
         if ( strokeColor && strokeColor.a > 0 && strokeWidth_PX > 0 ) {
-            const dVerticesA = context.getBuffer( `geojson.${painterKey}.polygon.strokeTrianglesA.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesA = context.getBuffer( `geojson.${painterKey}.polygon.strokeTrianglesA.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, strokeTrianglesA3, 3 );
             } );
-            const dVerticesB = context.getBuffer( `geojson.${painterKey}.polygon.strokeTrianglesB.${renderableKey}`, renderable, ( gl, target ) => {
+            const dVerticesB = context.getBuffer( `geojson.${painterKey}.polygon.strokeTrianglesB.${renderableKey}`, [ renderable ], ( gl, target ) => {
                 return bufferDataF32( gl, target, strokeTrianglesB2, 2 );
             } );
             const { program, attribs, uniforms } = context.getProgram( LINE_PROG_SOURCE );

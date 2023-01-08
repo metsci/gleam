@@ -1,6 +1,6 @@
-import { attachAxisInputHandlers2D, attachAxisViewportUpdater2D, Axis2D, axisBoundsFn, createCommonScaleAxis2D, Interval1D, Pane, ScatterPainter } from '@metsci/gleam-core';
+import { attachAxisInputHandlers2D, attachAxisViewportUpdater2D, Axis2D, axisBoundsFn, createCommonScaleAxis2D, Pane, ScatterPainter } from '@metsci/gleam-core';
 import { MvtCache, MvtPainter } from '@metsci/gleam-mvt';
-import { MERCATOR_PROJ, NormalCylindricalProjection } from '@metsci/gleam-util';
+import { Interval1D, MERCATOR_PROJ, NormalCylindricalProjection } from '@metsci/gleam-util';
 import { GREEN_WITH_TRIANGULAR_ALPHA, RED_WITH_TRIANGULAR_ALPHA, YELLOW_WITH_TRIANGULAR_ALPHA } from '../misc';
 
 const { PI } = Math;
@@ -21,8 +21,8 @@ export class GeoView {
         // XY axis
         this.proj = MERCATOR_PROJ;
         this.xyAxis = createCommonScaleAxis2D( );
-        this.xyAxis.y.maxConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, this.proj.maxUsableY( ) );
-        this.xyAxis.y.minConstraint = Interval1D.fromEdges( this.proj.minUsableY( ), POSITIVE_INFINITY );
+        this.xyAxis.y.maxConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, this.proj.maxUsableY );
+        this.xyAxis.y.minConstraint = Interval1D.fromEdges( this.proj.minUsableY, POSITIVE_INFINITY );
         this.xyAxis.y.scaleConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, 1e7*this.proj.maxDLatDY_RAD( ) );
         this.xyAxis.x.set( false, this.proj.lonToX( -PI ), this.proj.lonToX( +PI ) );
         attachAxisViewportUpdater2D( this.pane, this.xyAxis );

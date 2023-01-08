@@ -26,8 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { Interval2D, Size2D } from '@metsci/gleam-util';
 import { LayoutBase, Pane } from '../core';
-import { cssInset, currentDpr, Inset, Interval2D, roundInset, scaleInset, Size2D, StyleProp } from '../support';
+import { cssInset, currentDpr, Inset, roundInset, scaleInset, StyleProp } from '../support';
 
 export function createInsetPane( child: Pane, cssClasses: Iterable<string> = [] ): Pane {
     const pane = new Pane( new InsetLayout( ) );

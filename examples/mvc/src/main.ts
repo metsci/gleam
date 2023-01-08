@@ -1,7 +1,7 @@
-import { addCssLink, attachPane, createInsetPane, gleamCoreDefaultStyleLoading, Interval1D, Pane, RowsLayout, TextAtlasCache } from '@metsci/gleam-core';
+import { addCssLink, attachPane, createInsetPane, gleamCoreDefaultStyleLoading, Pane, RowsLayout, TextAtlasCache } from '@metsci/gleam-core';
 import { addMvtAttributionElement, createCacheWorkerPool, createRenderGroupsFactory, fetchTileSetToc, MvtCache } from '@metsci/gleam-mvt';
 import { gleamTimelineDefaultStyleLoading } from '@metsci/gleam-timeline';
-import { appendChild, ListenableBasic, requireNonNull, run, utcTimeToPsec } from '@metsci/gleam-util';
+import { appendChild, Interval1D, ListenableBasic, requireNonNull, run, utcTimeToPsec } from '@metsci/gleam-util';
 import { TILES_JSON_URL } from './config';
 import { attachGeoController } from './geo/controller';
 import { GeoView } from './geo/view';
@@ -39,7 +39,7 @@ run( async ( ) => {
     // Create a listenable that can be fired by application code to trigger a repaint
     const repaint = new ListenableBasic( );
 
-    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be quite slow
+    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be slow
     const textAtlasCache = new TextAtlasCache( );
 
     // Geo

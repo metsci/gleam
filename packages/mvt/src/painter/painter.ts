@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { bufferDataF32, bufferDataI16, Color, Context, createDomPeer, cssArray, cssColor, cssFloat, CssParser, currentDpr, DomPeer, enablePremultipliedAlphaBlending, frozenSupplier, GL, glUniformRgba, GRAY, Interval2D, Painter, PeerType, Point2D, put4f, StyleProp, UnboundStyleProp, UNPARSEABLE, vertexAttribPointer } from '@metsci/gleam-core';
-import { clamp, DEG_TO_RAD, mapRequire, mapSetIfAbsent, mod, NormalCylindricalProjection, RefBasic, requireNonNullish, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { bufferDataF32, bufferDataI16, Color, Context, createDomPeer, cssArray, cssColor, cssFloat, CssParser, currentDpr, DomPeer, enablePremultipliedAlphaBlending, frozenSupplier, GL, glUniformRgba, GRAY, Painter, PeerType, put4f, StyleProp, UnboundStyleProp, UNPARSEABLE, vertexAttribPointer } from '@metsci/gleam-core';
+import { clamp, DEG_TO_RAD, Interval2D, mapRequire, mapSetIfAbsent, mod, NormalCylindricalProjection, Point2D, RefBasic, requireNonNullish, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { MvtCache } from '../cache';
 import { areProjectionsCompatible, FeatureType, FEATURE_TYPE_LINE, FEATURE_TYPE_POINT, FEATURE_TYPE_POLYGON, RenderGroupLines, RenderGroupPolygons, TileIndex, TileSetToc, TilesViewport, TOC_DEFAULT_BOUNDS, TOC_DEFAULT_CRS, TOC_DEFAULT_MAXZOOM, TOC_DEFAULT_MINZOOM } from '../support';
 
@@ -271,7 +271,7 @@ export class MvtPainter implements Painter {
         // Define fn for updating origin-and-step device buffer
         const getXyOriginAndSteps = ( tileUrl: string, extent: number, perInstanceTileBounds_PX: ReadonlyArray<Interval2D> ) => {
             const dXyOriginAndStepKey = `${tileUrl}::${extent}::xyOriginAndStep4`;
-            return context.getBuffer( dXyOriginAndStepKey, context.frameNum, ( gl, target ) => {
+            return context.getBuffer( dXyOriginAndStepKey, [ context.frameNum ], ( gl, target ) => {
                 const xyOriginAndStep4 = new Float32Array( 4*perInstanceTileBounds_PX.length );
                 let i = 0;
                 for ( const tileBounds_PX of perInstanceTileBounds_PX ) {
@@ -305,7 +305,7 @@ export class MvtPainter implements Painter {
                         for ( const { extent, coords: { triangleCoords4, triangleVertexCount } } of groups ) {
                             if ( triangleVertexCount >= 3 ) {
                                 const dVerticesKey = `${tileUrl}::${groupKey}::${extent}::lineVertices`;
-                                const dVertices = context.getBuffer( dVerticesKey, null, ( gl, target ) => {
+                                const dVertices = context.getBuffer( dVerticesKey, [], ( gl, target ) => {
                                     return bufferDataI16( gl, target, triangleCoords4.subarray( 0, 4*triangleVertexCount ), 4 );
                                 } );
                                 vertexAttribPointer( gl, attribs.inCoords, dVertices );
@@ -347,7 +347,7 @@ export class MvtPainter implements Painter {
                         for ( const { extent, coords: { pointCoords2, pointVertexCount } } of groups ) {
                             if ( pointVertexCount >= 1 ) {
                                 const dVerticesKey = `${tileUrl}::${groupKey}::${extent}::pointVertices`;
-                                const dVertices = context.getBuffer( dVerticesKey, null, ( gl, target ) => {
+                                const dVertices = context.getBuffer( dVerticesKey, [], ( gl, target ) => {
                                     return bufferDataI16( gl, target, pointCoords2.subarray( 0, 2*pointVertexCount ), 2 );
                                 } );
                                 vertexAttribPointer( gl, attribs.inCoords, dVertices );
@@ -386,7 +386,7 @@ export class MvtPainter implements Painter {
                         for ( const { extent, coords: { triangleCoords2, triangleVertexCount } } of groups ) {
                             if ( triangleVertexCount >= 3 ) {
                                 const dVerticesKey = `${tileUrl}::${groupKey}::${extent}::fillVertices`;
-                                const dVertices = context.getBuffer( dVerticesKey, null, ( gl, target ) => {
+                                const dVertices = context.getBuffer( dVerticesKey, [], ( gl, target ) => {
                                     return bufferDataI16( gl, target, triangleCoords2.subarray( 0, 2*triangleVertexCount ), 2 );
                                 } );
                                 vertexAttribPointer( gl, attribs.inCoords, dVertices );

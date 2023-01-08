@@ -26,10 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Nullable, OneOf, requireNonNullish, StringTuple } from '@metsci/gleam-util';
+import { Interval1D, Interval2D, Nullable, OneOf, requireNonNullish, Size2D, StringTuple } from '@metsci/gleam-util';
 import { Color } from './color';
 import { EAST, Edge, NORTH, SOUTH, WEST } from './edge';
-import { Interval1D, Interval2D, Size2D } from './interval';
 import { GL } from './misc';
 
 export function glGetUniformLocation( gl: WebGLRenderingContext, program: Nullable<WebGLProgram>, name: string ): Nullable<WebGLUniformLocation> {

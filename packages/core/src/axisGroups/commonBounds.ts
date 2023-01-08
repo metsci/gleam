@@ -26,19 +26,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ActivityListenable, ActivityListenableBasic, Disposer, nextDownFloat64, nextUpFloat64, Nullable } from '@metsci/gleam-util';
+import { ActivityListenable, ActivityListenableBasic, Disposer, Interval1D, Interval2D, nextDownFloat64, nextUpFloat64, Nullable, Point2D, x, y } from '@metsci/gleam-util';
 import { Axis1D, Axis2D, AxisGroup1D, AxisGroupMember1D, AxisState1D } from '../core';
-import { Interval1D, Interval2D, Point2D, x, y } from '../support';
 
-export function createCommonBoundsAxis1D( bounds: Interval1D = Interval1D.fromEdges( -10, +10 ),
-                                          tieFrac: number = 0.0 ): Axis1D {
+export function createCommonBoundsAxis1D(
+    bounds: Interval1D = Interval1D.fromEdges( -10, +10 ),
+    tieFrac: number = 0.0,
+): Axis1D {
     return new Axis1D( new CommonBoundsAxisGroup1D( tieFrac, bounds ) );
 }
 
-export function createCommonBoundsAxis2D( bounds: Interval2D = Interval2D.fromEdges( -10, +10, -10, +10 ),
-                                          tieFrac: Point2D | [number,number] = [ 0.0, 0.0 ] ): Axis2D {
-    return new Axis2D( createCommonBoundsAxis1D( bounds.x, x( tieFrac ) ),
-                       createCommonBoundsAxis1D( bounds.y, y( tieFrac ) ) );
+export function createCommonBoundsAxis2D(
+    bounds: Interval2D = Interval2D.fromEdges( -10, +10, -10, +10 ),
+    tieFrac: Point2D | [number,number] = [ 0.0, 0.0 ],
+): Axis2D {
+    return new Axis2D(
+        createCommonBoundsAxis1D( bounds.x, x( tieFrac ) ),
+        createCommonBoundsAxis1D( bounds.y, y( tieFrac ) ),
+    );
 }
 
 const validSpanMin = nextUpFloat64( 1.0/Number.MAX_VALUE );
@@ -155,9 +160,11 @@ export class CommonBoundsAxisGroup1D implements AxisGroup1D {
     }
 
     /**
-     * Call reconstrain() after calling this method.
+     * Intended usage is for client code to call `Axis1D.link()`, not to call this
+     * method directly. If you do call this method directly, call `reconstrain()`
+     * afterwards.
      */
-    addMember( axis: AxisGroupMember1D ): Disposer {
+    _addMember( axis: AxisGroupMember1D ): Disposer {
         if ( this.axes.has( axis ) ) {
             throw new Error( 'This axis is already a member of this group' );
         }

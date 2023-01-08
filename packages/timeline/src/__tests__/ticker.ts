@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { createCommonBoundsAxis1D, Interval1D } from '@metsci/gleam-core';
-import { psecToIso8601, utcTimeToPsec } from '@metsci/gleam-util';
+import { createCommonBoundsAxis1D } from '@metsci/gleam-core';
+import { Interval1D, psecToIso8601, utcTimeToPsec } from '@metsci/gleam-util';
 import { TimeTicker } from '../ticker';
 
 it( 'TimeTicker', function( ) {

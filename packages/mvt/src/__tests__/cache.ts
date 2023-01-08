@@ -26,7 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { createTileIndexComparator } from "../cache";
+import { createTileIndexComparator } from '../cache';
 
 it( 'compareTileIndices', ( ) => {
     const z = 2;

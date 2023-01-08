@@ -72,7 +72,7 @@ export interface ReadableRef<V> extends ActivityListenable {
  * most exotic it gets is being backed by other refs.)
  *
  * Use `doTxn()` to make coordinated changes to multiple refs. For example:
- * ```
+ * ```typescript
  * const amountToTransfer = ...;
  * doTxn( ( ) => {
  *     accountBalanceRefA.update( ongoing, v => v - amountToTransfer );
@@ -315,7 +315,7 @@ export class RefBasic<V> implements Ref<V> {
 
 /**
  * A `ReadableRef` impl backed by one or more other `ReadableRef`s. Reading the value
- * actually reads the values of the backing refs, and combined them (in a subclass-
+ * actually reads the values of the backing refs, and combines them (in a subclass-
  * specific way) to create a `V`.
  *
  * Adding listeners to an object of this class actually adds the listeners to the backing

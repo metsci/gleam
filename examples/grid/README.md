@@ -1,6 +1,6 @@
 # Grid Layout Example
 
-Use `GridLayout` to arrange panes.
+Uses `GridLayout` to arrange panes.
 
 See [main.css](./src/main.css) for sizing of rows and columns.
 

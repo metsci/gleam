@@ -1,5 +1,5 @@
-import { Interval1D, PaneMouseEvent, put3f } from '@metsci/gleam-core';
-import { activityListenable, Disposer, DisposerGroup, FireableListenable, IMMEDIATE, isDefined } from '@metsci/gleam-util';
+import { PaneMouseEvent, put3f } from '@metsci/gleam-core';
+import { activityListenable, Disposer, DisposerGroup, FireableListenable, IMMEDIATE, Interval1D, isDefined } from '@metsci/gleam-util';
 import { Dot } from '../misc';
 import { Model } from '../model';
 import { GeoView } from './view';

@@ -146,9 +146,9 @@ function doBufferData( gl: WebGLRenderingContext, target: number, data: BufferSo
  * Convenience fn for `gl.bindBuffer()` and then `gl.vertexAttribPointer()`, using
  * the vertex attribute's buffer, component type, etc. from the given `BufferInfo`.
  */
-export function vertexAttribPointer( gl: WebGLRenderingContext, attrib: number, buffer: BufferInfo, normalized: boolean = false, stride: number = 0, offset: number = 0 ) {
+export function vertexAttribPointer( gl: WebGLRenderingContext, attrib: number, buffer: BufferInfo, normalized: boolean = false, stride_BYTES: number = 0, offset_BYTES: number = 0 ) {
     gl.bindBuffer( GL.ARRAY_BUFFER, buffer.buffer );
-    gl.vertexAttribPointer( attrib, buffer.meta.componentsPerUnit, buffer.meta.componentType, normalized, stride, offset );
+    gl.vertexAttribPointer( attrib, buffer.meta.componentsPerUnit, buffer.meta.componentType, normalized, stride_BYTES, offset_BYTES );
 }
 
 export interface Context {
@@ -208,13 +208,14 @@ export interface Context {
      *
      * If `key` has a cached value but the incoming `inputs` differs from
      * the cached `inputs`, `init` will be called and the cached value will
-     * be overwritten. Comparison of `inputs` uses `ValueObject` equality.
+     * be overwritten. `ValueObject` equality is used to compare elements
+     * of the input arrays.
      *
      * Intended usage is for no two call sites to use the same `key`. That
      * condition is not enforced -- but if it is violated, this method may
      * return a `TextureInfo` whose `meta` field is not actually of type `M`.
      */
-    getTexture<M extends TextureMeta>( key: string, inputs: unknown, init: TextureInit<M> ): TextureInfo<M>;
+    getTexture<M extends TextureMeta>( key: string, inputs: ReadonlyArray<unknown>, init: TextureInit<M> ): TextureInfo<M>;
 
     /**
      * Returned value is good for the duration of the current frame. Don't
@@ -223,13 +224,14 @@ export interface Context {
      *
      * If `key` has a cached value but the incoming `inputs` differs from
      * the cached `inputs`, `init` will be called and the cached value will
-     * be overwritten. Comparison of `inputs` uses `ValueObject` equality.
+     * be overwritten. `ValueObject` equality is used to compare elements
+     * of the input arrays.
      *
      * Intended usage is for no two call sites to use the same `key`. That
      * condition is not enforced -- but if it is violated, this method may
      * return a `BufferInfo` whose `meta` field is not actually of type `M`.
      */
-    getBuffer<M extends BufferMeta>( key: string, inputs: unknown, init: BufferInit<M> ): BufferInfo<M>;
+    getBuffer<M extends BufferMeta>( key: string, inputs: ReadonlyArray<unknown>, init: BufferInit<M> ): BufferInfo<M>;
 
     getColorTable( key: string ): ColorTablePopulator;
     putColorTable( key: string, value: ColorTablePopulator ): void;

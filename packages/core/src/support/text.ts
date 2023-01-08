@@ -26,10 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { equal, isDefined, mapSetIfAbsent, requireDefined, requireNonNull, run } from '@metsci/gleam-util';
+import { equal, Interval2D, isDefined, mapSetIfAbsent, requireDefined, requireNonNull, run } from '@metsci/gleam-util';
 import { AnchoredImage, Atlas } from './atlas';
 import { BLACK, parseColor, WHITE } from './color';
-import { Interval2D } from './interval';
 import { put4f, xPixelToNdc, yUpwardPixelToNdc } from './misc';
 import { ValueBase } from './valueBase';
 

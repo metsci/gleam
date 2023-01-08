@@ -120,8 +120,7 @@ export interface Splitter {
 }
 
 const cachedSplitters = new Map<number,Splitter>( );
-function getSplitX( proj: NormalCylindricalProjection ): Splitter {
-    const xSpan = proj.xSpan( );
+function getSplitX( { xSpan }: { xSpan: number } ): Splitter {
     return mapSetIfAbsent( cachedSplitters, xSpan, ( ) => createXSplitter( xSpan ) );
 }
 
@@ -131,7 +130,7 @@ function getSplitX( proj: NormalCylindricalProjection ): Splitter {
  * bit float, transferred to the graphics device, and used there for arithmetic
  * with 46-bit precision.
  *
- * The 46-bit splits values will have a number of fractional bits chosen, based
+ * The 46-bit split values will have a number of fractional bits chosen, based
  * on the value of `xWrapSpan`, to give millimeter precision or slightly better.
  *
  * See https://help.agi.com/AGIComponents/html/BlogPrecisionsPrecisions.htm.
@@ -175,7 +174,7 @@ function createMarkersPreRenderable(
     splitX: Splitter,
 ): MarkersPreRenderable {
     const xMeridian = proj.lonToX( 0 );
-    const xWrapSpan = proj.xSpan( );
+    const xWrapSpan = proj.xSpan;
 
     // Project, relativize to xMeridian, and wrap to [-180,+180)
     const points = new Array<Xyz>( );
@@ -244,7 +243,7 @@ function createLinesPreRenderable(
     splitX: Splitter,
 ): LinesPreRenderable {
     const xMeridian = proj.lonToX( 0 );
-    const xWrapSpan = proj.xSpan( );
+    const xWrapSpan = proj.xSpan;
 
     // Project, wrapping so each line segment goes the short way around
     const lines = new Array<Array<Xy>>( );
@@ -345,7 +344,7 @@ function createPolygonsPreRenderable(
     splitX: Splitter,
 ): PolygonsPreRenderable {
     const xMeridian = proj.lonToX( 0 );
-    const xWrapSpan = proj.xSpan( );
+    const xWrapSpan = proj.xSpan;
     type PolygonEntry = { polygon: Xy[][], polygonWithPoleTweaks: Xy[][], altitudeScore: number, areaScore: number };
     const northPole_UXYZ = [ 0, 0, +1 ] as const;
     const southPole_UXYZ = [ 0, 0, -1 ] as const;
@@ -404,7 +403,7 @@ function createPolygonsPreRenderable(
             const polygonWithPoleTweaks = new Array<Array<Xy>>( );
             for ( const { ring, containsNorthPole, containsSouthPole } of rings ) {
                 if ( containsNorthPole ) {
-                    const yNorth = clamp( proj.minUsableY( ), proj.maxUsableY( ), proj.latToY( +0.5*PI ) );
+                    const yNorth = clamp( proj.minUsableY, proj.maxUsableY, proj.latToY( +0.5*PI ) );
 
                     // Rotate vertex list so it starts with vertex nearest pole -- ensures
                     // retrace edges we inject won't intersect the ring's existing edges
@@ -432,7 +431,7 @@ function createPolygonsPreRenderable(
                     polygonWithPoleTweaks.push( [ [ xFirst,yNorth ], ...ringRotated, [ xFirstWrapped,yFirst ], [ xFirstWrapped,yNorth ] ] );
                 }
                 else if ( containsSouthPole ) {
-                    const ySouth = clamp( proj.minUsableY( ), proj.maxUsableY( ), proj.latToY( -0.5*PI ) );
+                    const ySouth = clamp( proj.minUsableY, proj.maxUsableY, proj.latToY( -0.5*PI ) );
 
                     // Rotate vertex list so it starts with vertex nearest pole -- ensures
                     // retrace edges we inject won't intersect the ring's existing edges

@@ -29,6 +29,9 @@
 import { findIndexAfter, findIndexAtOrAfter, findIndexAtOrBefore, findIndexBefore, findIndexNearest, findIndexOf, MissFn } from './binarySearch';
 import { arrayClear, arrayClone, arrayRemoveFirst, arrayRemoveLast, arrayReverseIterator, arraySortStable, Nullable } from './misc';
 
+/**
+ * Copy-on-write array.
+ */
 export class CowArray<V> {
     readonly inReverse: Iterable<V>;
 
@@ -189,48 +192,62 @@ export class CowArray<V> {
         return this;
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     forEach( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => void, thisArg?: any ): void {
-        // Assume fn doesn't modify this.current
         return this.current.forEach( fn, thisArg );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     map<U>( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => U, thisArg?: any ): CowArray<U> {
-        // Assume fn doesn't modify this.current
         return new CowArray( this.current.map( fn, thisArg ) );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     filter<S extends V>( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => v is S, thisArg?: any ): CowArray<S>;
     filter( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => unknown, thisArg?: any ): CowArray<V>;
     filter( fn: any, thisArg?: any ) {
-        // Assume fn doesn't modify this.current
         return new CowArray( this.current.filter( fn, thisArg ) );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     reduce( fn: ( vPrev: V, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => V ): V;
     reduce( fn: ( vPrev: V, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => V, vInit: V ): V;
     reduce<U>( fn: ( uPrev: U, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => U, uInit: U ): U;
     reduce( fn: any, init?: any ) {
-        // Assume fn doesn't modify this.current
         return this.current.reduce( fn, init );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     reduceRight( fn: ( vPrev: V, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => V ): V;
     reduceRight( fn: ( vPrev: V, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => V, vInit: V ): V;
     reduceRight<U>( fn: ( uPrev: U, vCurrent: V, iCurrent: number, vs: ReadonlyArray<V> ) => U, uInit: U ): U;
     reduceRight( fn: any, init?: any ) {
-        // Assume fn doesn't modify this.current
         return this.current.reduceRight( fn, init );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     find<S extends V>( fn: ( this: void, v: V, i: number, vs: ReadonlyArray<V> ) => v is S, thisArg?: any ): S | undefined;
     find( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => unknown, thisArg?: any ): V | undefined;
     find( fn: any, thisArg?: any ) {
-        // Assume fn doesn't modify this.current
         return this.current.find( fn, thisArg );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     findIndex( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => unknown, thisArg?: any ): number {
-        // Assume fn doesn't modify this.current
         return this.current.findIndex( fn, thisArg );
     }
 
@@ -260,13 +277,17 @@ export class CowArray<V> {
         return new CowArray( this.current.slice( start, end ) );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     every( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => unknown, thisArg?: any ): boolean {
-        // Assume fn doesn't modify this.current
         return this.current.every( fn, thisArg );
     }
 
+    /**
+     * Assumes `fn` does not modify this array.
+     */
     some( fn: ( v: V, i: number, vs: ReadonlyArray<V> ) => unknown, thisArg?: any ): boolean {
-        // Assume fn doesn't modify this.current
         return this.current.some( fn, thisArg );
     }
 

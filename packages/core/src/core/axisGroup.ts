@@ -26,8 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Interval1D } from '../support';
-import { ActivityListenable, Disposer } from '@metsci/gleam-util';
+import { ActivityListenable, Disposer, Interval1D } from '@metsci/gleam-util';
 
 /**
  * **NOTE:** This interface is defined in terms of *logical* pixels -- unlike the
@@ -55,9 +54,11 @@ export interface AxisGroup1D {
     clone( ): AxisGroup1D;
 
     /**
-     * This method should not be called directly -- use `Axis1D.link` instead.
+     * Intended usage is for client code to call `Axis1D.link()`, not to call this
+     * method directly. If you do call this method directly, call `reconstrain()`
+     * afterwards.
      */
-    addMember( axis: AxisGroupMember1D ): Disposer;
+    _addMember( axis: AxisGroupMember1D ): Disposer;
 }
 
 export interface AxisState1D {

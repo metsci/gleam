@@ -26,8 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Interval1D } from '@metsci/gleam-core';
-import { LinkedMap, Nullable, requireDefined, Supplier } from '@metsci/gleam-util';
+import { Interval1D, LinkedMap, Nullable, requireDefined, Supplier } from '@metsci/gleam-util';
 
 /**
  * Split the value into two parts, each of which can be converted to a

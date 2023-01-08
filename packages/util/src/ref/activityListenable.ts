@@ -54,10 +54,12 @@ export function argsForAddActivityListener( a: ListenerConfig | ActivityListener
     }
 }
 
-export function doAddActivityListener( ongoing: Listenable,
-                                       completed: Listenable,
-                                       config: ListenerConfig,
-                                       listener: ActivityListener ): Disposer {
+export function doAddActivityListener(
+    ongoing: Listenable,
+    completed: Listenable,
+    config: ListenerConfig,
+    listener: ActivityListener,
+): Disposer {
     const disposers = new DisposerGroup( );
     if ( config.once ) {
         const config2 = withoutOnce( config );

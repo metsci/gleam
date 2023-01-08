@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Axis1D, AxisDivider, AxisLabel, AxisLabelSet, createDomPeer, createLinearTickSeq, cssFloat, cssString, EMPTY_AXISLABELSET, EMPTY_TICKSET, findLinearTickSeq, Interval1D, PeerType, StyleProp, Ticker, TickSet } from '@metsci/gleam-core';
-import { arrayAllEqual, atLeast, clamp, compareLocalTimes, firstTrue, get, LocalDateTime, localTime, localTimeToPsec, Nullable, psecToIso8601, psecToZonedTime, requireDefined, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, SECONDS_PER_MONTH_APPROX, SECONDS_PER_YEAR_APPROX, ZonedDateTime, zonedTime, zoneOffsetAt_SEC } from '@metsci/gleam-util';
+import { Axis1D, AxisDivider, AxisLabel, AxisLabelSet, createDomPeer, createLinearTickSeq, cssFloat, cssString, EMPTY_AXISLABELSET, EMPTY_TICKSET, findLinearTickSeq, PeerType, StyleProp, Ticker, TickSet } from '@metsci/gleam-core';
+import { arrayAllEqual, atLeast, clamp, compareLocalTimes, firstTrue, get, Interval1D, LocalDateTime, localTime, localTimeToPsec, Nullable, psecToIso8601, psecToZonedTime, requireDefined, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, SECONDS_PER_MONTH_APPROX, SECONDS_PER_YEAR_APPROX, ZonedDateTime, zonedTime, zoneOffsetAt_SEC } from '@metsci/gleam-util';
 
 const { ceil, floor, max, min } = Math;
 

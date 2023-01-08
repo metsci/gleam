@@ -33,8 +33,10 @@ import { Listenable } from './listenable';
 import { ReadableRef, ReadableRefDerived, Ref, RefDerived } from './ref';
 
 export class PairReadableRef<A,B> extends ReadableRefDerived<[A,B]> {
-    constructor( protected readonly aRef: ReadableRef<A>,
-                 protected readonly bRef: ReadableRef<B> ) {
+    constructor(
+        protected readonly aRef: ReadableRef<A>,
+        protected readonly bRef: ReadableRef<B>,
+    ) {
         super( aRef, bRef );
     }
 
@@ -48,8 +50,10 @@ export class PairReadableRef<A,B> extends ReadableRefDerived<[A,B]> {
 }
 
 export class PairRef<A,B> extends RefDerived<[A,B]> {
-    constructor( protected readonly aRef: Ref<A>,
-                 protected readonly bRef: Ref<B> ) {
+    constructor(
+        protected readonly aRef: Ref<A>,
+        protected readonly bRef: Ref<B>,
+    ) {
         super( aRef, bRef );
     }
 

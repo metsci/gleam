@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, Disposer, DisposerGroup, RefBasic, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { appendChild, Disposer, DisposerGroup, Interval2D, RefBasic, Size2D, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { Axis1D, Context, Painter, Ticker } from '../../core';
-import { createDomPeer, cssFloat, currentDpr, EAST, Edge, getOppositeEdge, glViewport, Interval2D, NORTH, PeerType, Size2D, SOUTH, StyleProp, TextAtlasCache, WEST } from '../../support';
+import { createDomPeer, cssFloat, currentDpr, EAST, Edge, getOppositeEdge, glViewport, NORTH, PeerType, SOUTH, StyleProp, TextAtlasCache, WEST } from '../../support';
 import { ArrayWithZIndices, frozenSupplier } from '../../util';
 import { AxisPainter } from '../axisPainter';
 import { TagsPainter } from '../axisTagsPainter';

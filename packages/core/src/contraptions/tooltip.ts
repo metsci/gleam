@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { clamp } from '@metsci/gleam-util';
-import { cssFloat, currentDpr, Point2D, StyleProp } from '../support';
+import { clamp, Point2D } from '@metsci/gleam-util';
+import { cssFloat, currentDpr, StyleProp } from '../support';
 
 export class TooltipDiv {
     readonly div = document.createElement( 'div' );

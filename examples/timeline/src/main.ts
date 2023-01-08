@@ -1,6 +1,6 @@
-import { addCssLink, attachPane, createCommonBoundsAxis1D, createHoverAndFocusRefs, gleamCoreDefaultStyleLoading, GridPainter, Interval1D, PaneKeyEvent, TextAtlasCache } from '@metsci/gleam-core';
+import { addCssLink, attachPane, createCommonBoundsAxis1D, createHoverAndFocusRefs, gleamCoreDefaultStyleLoading, GridPainter, PaneKeyEvent, TextAtlasCache } from '@metsci/gleam-core';
 import { addRow, attachEventClassUpdaters, attachTimeCursor_PSEC, EventImpl, EventsRow, HorizontalTimeline, isWritableEvent, STANDARD_PATTERN_GENS } from '@metsci/gleam-timeline';
-import { get, ListenableBasic, RefBasic, requireNonNull, run, SECONDS_PER_HOUR, tripleEquals, utcTimeToPsec } from '@metsci/gleam-util';
+import { get, Interval1D, ListenableBasic, RefBasic, requireNonNull, run, SECONDS_PER_HOUR, tripleEquals, utcTimeToPsec } from '@metsci/gleam-util';
 import { createHeatmapPlotRowPane, createLinePlotRowPane, createScatterPlotRowPane } from './misc';
 
 // Resolve relative URLs at load-time, in case a polyfill relies on document.currentScript
@@ -16,7 +16,7 @@ run( async ( ) => {
     // Create a listenable that can be fired by application code to trigger a repaint
     const repaint = new ListenableBasic( );
 
-    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be quite slow
+    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be slow
     const textAtlasCache = new TextAtlasCache( );
 
     // Create a time axis, and constrain it to reasonable zoom levels

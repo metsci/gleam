@@ -29,9 +29,11 @@
 import { Runnable, NOOP, Disposer } from '../util';
 import { ListenerConfig, withoutImmediate } from './config';
 
-export function doHandleImmediateFlag( config: ListenerConfig,
-                                       doImmediately: Runnable,
-                                       doAddListener: ( config: ListenerConfig ) => Disposer ): Disposer {
+export function doHandleImmediateFlag(
+    config: ListenerConfig,
+    doImmediately: Runnable,
+    doAddListener: ( config: ListenerConfig ) => Disposer,
+): Disposer {
     if ( config.immediate ) {
         doImmediately( );
         if ( config.once ) {

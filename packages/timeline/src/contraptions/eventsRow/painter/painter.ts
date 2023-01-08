@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { activeTexture, Atlas, bindTexture, Color, Context, createDomPeer, cssFloat, currentDpr, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, frozenSupplier, GL, glUniformInterval2D, glUniformSize2D, GRAY, Interval1D, Interval2D, Painter, PeerType, RED, requireFloatTextureSupport, requireVertexTexUnits, StyleProp, ValueBase, WHITE } from '@metsci/gleam-core';
-import { DisposerGroup, equal, LinkedMap, Nullable, RefBasic, requireDefined, requireNonNull, run, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { activeTexture, Atlas, bindTexture, Color, Context, createDomPeer, cssFloat, currentDpr, enablePremultipliedAlphaBlending, ensureHostBufferCapacity, frozenSupplier, GL, glUniformInterval2D, glUniformSize2D, GRAY, Painter, PeerType, RED, requireFloatTextureSupport, requireVertexTexUnits, StyleProp, ValueBase, WHITE } from '@metsci/gleam-core';
+import { DisposerGroup, equal, Interval1D, Interval2D, LinkedMap, Nullable, RefBasic, requireDefined, requireNonNull, run, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { EventsGroup, ReadableEvent } from '../data';
 import { FrozenPattern, Pattern, PatternRasterizer, SolidPatternRasterizer } from '../patterns';
 import { EventsTable, StylesTable } from './common';

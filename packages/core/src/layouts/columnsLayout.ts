@@ -26,19 +26,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { LinkedSet, newImmutableSet } from '@metsci/gleam-util';
+import { Interval2D, LinkedSet, newImmutableSet, Size2D } from '@metsci/gleam-util';
 import { LayoutBase, Pane } from '../core';
-import { cssBoolean, cssFloat, cssString, currentDpr, Interval2D, Size2D, StyleProp, UnboundStyleProp } from '../support';
+import { cssBoolean, cssFloat, cssString, currentDpr, StyleProp, UnboundStyleProp } from '../support';
 import { computeGridChildViewports_PX, computeGridPrefSize_PX, RowsConfig, setColumnKey, setRowKey } from './gridLayout';
 
 /**
  * Like a `GridLayout` with a single row. Honors `GridLayout`'s column-
  * related CSS properties.
  *
- * Instead of `GridLayout.visibleColumnKeys`, this class makes all visible
- * children into visible columns, and orders columns to match the ordering
- * of the `children` list (with optional overrides in CSS). In many cases
- * this is simpler for the caller than using `GridLayout` itself.
+ * Unlike `GridLayout`, this class makes all visible children into visible
+ * columns, ordered to match the order in which they were added to the parent
+ * pane. In many cases this is simpler for the caller than using `GridLayout`
+ * itself.
  */
 export class ColumnsLayout extends LayoutBase {
     readonly rightToLeft = StyleProp.create( this.style, '--right-to-left', cssBoolean, false );
@@ -46,16 +46,20 @@ export class ColumnsLayout extends LayoutBase {
 
     readonly columnWidth = UnboundStyleProp.create( '--column-width', cssString, 'flex(0,pref)' );
 
-    visibleColumnKeys: LinkedSet<string>;
+    protected _visibleColumnKeys: LinkedSet<string>;
 
     constructor( ) {
         super( 'columns-layout' );
-        this.visibleColumnKeys = new LinkedSet( );
+        this._visibleColumnKeys = new LinkedSet( );
+    }
+
+    get visibleColumnKeys( ): ReadonlySet<string> {
+        return this._visibleColumnKeys;
     }
 
     computePrefSize_PX( children: Iterable<Pane> ): Size2D {
         updateChildRowKeys( children );
-        this.visibleColumnKeys = updateChildColumnKeys( children );
+        this._visibleColumnKeys = updateChildColumnKeys( children );
         return computeGridPrefSize_PX( currentDpr( this ), children, SINGLE_ROW_CONFIG, this );
     }
 

@@ -26,9 +26,83 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { clamp, equal, hashCode, isNullish, nextUpFloat64 } from '@metsci/gleam-util';
-import { Point2D } from './point';
-import { X, Y } from './xy';
+import { equal, hashCode } from './immutable';
+import { clamp, isNullish, nextUpFloat64 } from './misc';
+
+export const X = Symbol( 'X' );
+export type X = typeof X;
+
+export const Y = Symbol( 'Y' );
+export type Y = typeof Y;
+
+export function x( xy: { x: number, y: number } | [ x: number, y: number ] ): number {
+    return ( Array.isArray( xy ) ? xy[0] : xy.x );
+}
+
+export function y( xy: { x: number, y: number } | [ x: number, y: number ] ): number {
+    return ( Array.isArray( xy ) ? xy[1] : xy.y );
+}
+
+export function getOrthogonalDim( dim: X | Y ): Y | X {
+    switch ( dim ) {
+        case X: return Y;
+        case Y: return X;
+    }
+}
+
+export class Point2D {
+    static readonly ZERO = Object.freeze( new Point2D( 0, 0 ) );
+
+    readonly x: number;
+    readonly y: number;
+
+    constructor( x: number, y: number );
+    constructor( xy: [number,number] );
+    constructor( arg0: any, arg1?: any ) {
+        if ( arg1 !== undefined ) {
+            this.x = arg0;
+            this.y = arg1;
+        }
+        else {
+            this.x = arg0[ 0 ];
+            this.y = arg0[ 1 ];
+        }
+    }
+
+    get [X]( ): number {
+        return this.x;
+    }
+
+    get [Y]( ): number {
+        return this.y;
+    }
+
+    times( factor: number ): Point2D {
+        return new Point2D( factor * this.x, factor * this.y );
+    }
+
+    hashCode( ): number {
+        const prime = 33413;
+        let result = 1;
+        result = prime * result + hashCode( this.x );
+        result = prime * result + hashCode( this.y );
+        return result;
+    }
+
+    equals( o: unknown ): boolean {
+        if ( o === this ) {
+            return true;
+        }
+        else if ( isNullish( o ) ) {
+            return false;
+        }
+        else {
+            const other = o as Point2D;
+            return ( Object.is( other.x, this.x )
+                  && Object.is( other.y, this.y ) );
+        }
+    }
+}
 
 export class Size2D {
     static readonly ZERO = Object.freeze( new Size2D( 0, 0 ) );
@@ -102,7 +176,7 @@ export class Interval1D {
     /**
      * The span of the returned interval may differ from the given span
      * due to floating-point precision error, or handling of infinities.
-     * This is annoying -- but it ensures that  span = max - min  holds
+     * This is annoying -- but it ensures that `span = max - min` holds
      * for all intervals, regardless of how they were constructed.
      */
     static fromRect( min: number, approxSpan: number ): Interval1D {
@@ -309,22 +383,26 @@ export class Interval2D {
     }
 
     valueToFrac( v: Point2D ): Point2D {
-        return new Point2D( this.x.valueToFrac( v.x ),
-                            this.y.valueToFrac( v.y ) );
+        return new Point2D(
+            this.x.valueToFrac( v.x ),
+            this.y.valueToFrac( v.y ),
+        );
     }
 
     fracToValue( frac: Point2D ): Point2D {
-        return new Point2D( this.x.fracToValue( frac.x ),
-                            this.y.fracToValue( frac.y ) );
+        return new Point2D(
+            this.x.fracToValue( frac.x ),
+            this.y.fracToValue( frac.y ),
+        );
     }
 
-    containsPoint( xy: Point2D ): boolean;
+    containsPoint( xy: { x: number, y: number } ): boolean;
     containsPoint( x: number, y: number ): boolean;
     containsPoint( arg0: any, arg1?: any ): boolean {
         let x;
         let y;
         if ( arg1 === undefined ) {
-            const xy = arg0 as Point2D;
+            const xy = arg0 as { x: number, y: number };
             x = xy.x;
             y = xy.y;
         }

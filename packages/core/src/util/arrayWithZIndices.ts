@@ -28,17 +28,21 @@
  */
 import { CowArray, Disposer, requireDefined } from '@metsci/gleam-util';
 
+type Zw = [ z: number, w: number ];
+
 export class ArrayWithZIndices<T> implements Iterable<T> {
     readonly inReverse: Iterable<T>;
 
     protected readonly array: CowArray<T>;
-    protected readonly zMap: Map<T,number>;
     protected arrayNeedsSorting: boolean;
+    protected readonly zwMap: Map<T,Zw>;
+    protected wNext: number;
 
     constructor( ) {
         this.array = new CowArray( );
-        this.zMap = new Map( );
         this.arrayNeedsSorting = false;
+        this.zwMap = new Map( );
+        this.wNext = 1;
 
         const _this = this;
         this.inReverse = {
@@ -50,7 +54,8 @@ export class ArrayWithZIndices<T> implements Iterable<T> {
 
     add( item: T, zIndex: number = 0 ): Disposer {
         this.array.push( item );
-        this.zMap.set( item, zIndex );
+        const w = this.wNext++;
+        this.zwMap.set( item, [ zIndex, w ] );
         this.arrayNeedsSorting = true;
         return ( ) => {
             this.delete( item );
@@ -58,41 +63,66 @@ export class ArrayWithZIndices<T> implements Iterable<T> {
     }
 
     has( item: T ): boolean {
-        return this.zMap.has( item );
+        return this.zwMap.has( item );
     }
 
     delete( item: T ): void {
         this.array.removeFirst( item );
-        this.zMap.delete( item );
+        this.zwMap.delete( item );
     }
 
     getZIndex( item: T ): number {
-        if ( !this.zMap.has( item ) ) {
+        if ( !this.zwMap.has( item ) ) {
             throw new Error( 'Item not found' );
         }
-        return requireDefined( this.zMap.get( item ) );
+        const [ z ] = requireDefined( this.zwMap.get( item ) );
+        return z;
     }
 
     setZIndex( item: T, zIndex: number ): void {
-        if ( !this.zMap.has( item ) ) {
+        this.appendToZIndex( item, zIndex );
+    }
+
+    prependToZIndex( item: T, zIndex: number ): void {
+        if ( !this.zwMap.has( item ) ) {
             throw new Error( 'Item not found' );
         }
-        this.zMap.set( item, zIndex );
+        // Negate W so this entry gets sorted before others with the same Z
+        const w = -1 * this.wNext++;
+        this.zwMap.set( item, [ zIndex, w ] );
+        this.arrayNeedsSorting = true;
+    }
+
+    appendToZIndex( item: T, zIndex: number ): void {
+        if ( !this.zwMap.has( item ) ) {
+            throw new Error( 'Item not found' );
+        }
+        const w = this.wNext++;
+        this.zwMap.set( item, [ zIndex, w ] );
         this.arrayNeedsSorting = true;
     }
 
     clear( ): void {
         this.array.clear( );
-        this.zMap.clear( );
+        this.zwMap.clear( );
         this.arrayNeedsSorting = false;
     }
 
     protected sortAndGetArray( ): CowArray<T> {
         if ( this.arrayNeedsSorting ) {
-            this.array.sortStable( ( a, b ) => {
-                const za = requireDefined( this.zMap.get( a ) );
-                const zb = requireDefined( this.zMap.get( b ) );
-                return ( za - zb );
+            this.array.sort( ( a, b ) => {
+                const [ zA, wA ] = requireDefined( this.zwMap.get( a ) );
+                const [ zB, wB ] = requireDefined( this.zwMap.get( b ) );
+
+                // Z low to high
+                const zComparison = zA - zB;
+                if ( zComparison !== 0 ) {
+                    return zComparison;
+                }
+
+                // W low to high
+                const wComparison = wA - wB;
+                return wComparison;
             } );
             this.arrayNeedsSorting = false;
         }

@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Nullable, RefBasic, Supplier, tripleEquals } from '@metsci/gleam-util';
+import { Interval1D, Interval2D, Nullable, RefBasic, Supplier, tripleEquals } from '@metsci/gleam-util';
 import { Context, Painter } from '../../core';
-import { createDomPeer, cssEnum, cssLowercase, enablePremultipliedAlphaBlending, Float32Scratch, GL, glUniformInterval1D, glUniformInterval2D, Interval1D, Interval2D, PeerType, StyleProp } from '../../support';
+import { createDomPeer, cssEnum, cssLowercase, enablePremultipliedAlphaBlending, Float32Scratch, GL, glUniformInterval1D, glUniformInterval2D, PeerType, StyleProp } from '../../support';
 import { frozenSupplier } from '../../util';
 import { EmptyMesh, Mesh } from './mesh';
 import { EmptySurface, Surface } from './surface';

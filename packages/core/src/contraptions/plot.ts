@@ -26,12 +26,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Disposer, DisposerGroup, doTxn } from '@metsci/gleam-util';
+import { Disposer, DisposerGroup, doTxn, getOrthogonalDim, X, Y } from '@metsci/gleam-util';
 import { Axis1D, Axis2D, createAxisZoomerAndPanner2D, createAxisZoomersAndPanners1D, maskedInputHandler, Painter, Pane } from '../core';
 import { GridLayout, setGridCoords } from '../layouts/gridLayout';
 import { InsetLayout } from '../layouts/insetLayout';
 import { PlotBorderPainter } from '../painters/plotBorderPainter';
-import { createInset, currentDpr, E, EAST, Edge, getOrthogonalDim, N, NORTH, paneViewportFn_PX, S, SOUTH, W, WEST, X, Y } from '../support';
+import { createInset, currentDpr, E, EAST, Edge, N, NORTH, paneViewportFn_PX, S, SOUTH, W, WEST } from '../support';
 
 export function getEdgeAxisType( edge: Edge ): X | Y {
     switch ( edge ) {
@@ -149,7 +149,7 @@ export class Plot {
      * to zoom/pan one axis but not the other -- e.g. so that scrolling/dragging a timeline plot will
      * zoom/pan only the time axis.
      */
-    addEdgeAxis1D( axisWidget: { axis: Axis1D, axisType: X|Y, pane: Pane }, plotEdge: Edge, controlFromCenter: boolean = true ): Disposer {
+    addEdgeAxis1D( axisWidget: { axis: Axis1D, axisType: X | Y, pane: Pane }, plotEdge: Edge, controlFromCenter: boolean = true ): Disposer {
         const disposers = new DisposerGroup( );
 
         disposers.add( this.addEdgePane( axisWidget.pane, plotEdge, Z_INDEX_EDGE_AXIS ) );
@@ -169,7 +169,7 @@ export class Plot {
         return disposers;
     }
 
-    addEdgeAxis2D( xAxisWidget: { axis: Axis1D, pane: Pane }, xPlotEdge: N|S, yAxisWidget: { axis: Axis1D, pane: Pane }, yPlotEdge: E|W ): Disposer {
+    addEdgeAxis2D( xAxisWidget: { axis: Axis1D, pane: Pane }, xPlotEdge: N | S, yAxisWidget: { axis: Axis1D, pane: Pane }, yPlotEdge: E | W ): Disposer {
         const disposers = new DisposerGroup( );
 
         disposers.add( this.addEdgePane( xAxisWidget.pane, xPlotEdge, Z_INDEX_EDGE_AXIS ) );

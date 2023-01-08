@@ -1,5 +1,5 @@
-import { addCssLink, attachPane, axisBoundsFn, BarAxisWidget, CET_L03, CET_L06, CET_L07, CET_L19, CET_R1, CET_R2, createCommonBoundsAxis1D, createCommonBoundsAxis2D, createInsetPane, EAST, EdgeAxisWidget, gleamCoreDefaultStyleLoading, GradientPainter, GridPainter, HeatmapPainter, INFERNO, LinearMesh, LinearTicker, PLASMA, Plot, SOUTH, tagBoundsFn, TagMap, TextAtlasCache, VIRIDIS, WEST, Y } from '@metsci/gleam-core';
-import { activityListenable, IMMEDIATE, ListenableBasic, requireNonNull, run } from '@metsci/gleam-util';
+import { addCssLink, attachPane, axisBoundsFn, BarAxisWidget, CET_L03, CET_L06, CET_L07, CET_L19, CET_R1, CET_R2, createCommonBoundsAxis1D, createCommonBoundsAxis2D, createInsetPane, EAST, EdgeAxisWidget, gleamCoreDefaultStyleLoading, GradientPainter, GridPainter, HeatmapPainter, INFERNO, LinearMesh, LinearTicker, PLASMA, Plot, SOUTH, tagBoundsFn, TagMap, TextAtlasCache, VIRIDIS, WEST } from '@metsci/gleam-core';
+import { activityListenable, IMMEDIATE, ListenableBasic, requireNonNull, run, Y } from '@metsci/gleam-util';
 import { generateSurface } from './misc';
 
 // Resolve relative URLs at load-time, in case a polyfill relies on document.currentScript
@@ -15,7 +15,7 @@ run( async ( ) => {
     // Create a listenable that can be fired by application code to trigger a repaint
     const repaint = new ListenableBasic( );
 
-    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be quite slow
+    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be slow
     const textAtlasCache = new TextAtlasCache( );
 
     // Create spatial axes

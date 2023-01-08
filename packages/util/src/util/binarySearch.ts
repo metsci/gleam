@@ -41,7 +41,7 @@ export interface MissFn<T> {
 
 export function linearMissFn( target: number ): MissFn<number> {
     return candidate => {
-        // This is a little sloppy if either value is NaN, or if one is +0.0 and the other is -0.0
+        // TODO: Be more careful about NaN, and about +0.0 vs -0.0
         return ( candidate - target );
     };
 }

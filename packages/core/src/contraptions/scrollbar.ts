@@ -26,11 +26,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, dispose, Disposer, FireableListenable, isDefined, linkListenables, ListenableBasic, newImmutableList, newImmutableMap, Nullable, RefBasic, tripleEquals } from '@metsci/gleam-util';
+import { appendChild, dispose, Disposer, FireableListenable, Interval1D, Interval2D, isDefined, linkListenables, ListenableBasic, newImmutableList, newImmutableMap, Nullable, RefBasic, tripleEquals } from '@metsci/gleam-util';
 import { Context, DragHandler, HoverHandler, InputHandler, KeyHandler, Painter, Pane, PaneKeyEvent, PaneMouseEvent, WheelHandler } from '../core';
 import { VerticalScrollerLayout } from '../layouts/scrollerLayout';
 import { FillPainter } from '../painters/fillPainter';
-import { createDomPeer, cssColor, glViewport, Interval1D, Interval2D, PeerType, StyleProp } from '../support';
+import { createDomPeer, cssColor, glViewport, PeerType, StyleProp } from '../support';
 import { frozenSupplier } from '../util';
 
 export class VerticalScrollbar {

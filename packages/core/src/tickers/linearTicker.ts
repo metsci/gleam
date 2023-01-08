@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { equal, Nullable, run } from '@metsci/gleam-util';
+import { equal, Interval1D, Nullable, run } from '@metsci/gleam-util';
 import { Axis1D, AxisLabel, AxisLabelSet, EMPTY_TICKSET, Ticker, TickSet } from '../core';
-import { createDomPeer, cssFloat, cssInteger, Interval1D, PeerType, StyleProp, ValueBase } from '../support';
+import { createDomPeer, cssFloat, cssInteger, PeerType, StyleProp, ValueBase } from '../support';
 
 export const linearTickIntervalFactors = Object.freeze( [ 5.0, 2.0, 1.0, 0.5, 0.2, 0.1 ] );
 

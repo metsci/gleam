@@ -56,7 +56,8 @@ const tocHtml = `
     </body>
     </html>
 `;
-app.use( '/', ( req, resp ) => resp.send( tocHtml ) );
+app.get( '/index.html', ( req, resp ) => resp.send( tocHtml ) );
+app.get( '/', ( req, resp ) => resp.send( tocHtml ) );
 
 // Serve
 const server = http.createServer( app );

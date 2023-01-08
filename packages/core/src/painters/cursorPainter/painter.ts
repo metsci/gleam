@@ -26,9 +26,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Disposer, DisposerGroup, equal, FireableListenable, IMMEDIATE, isDefined, Nullable, Ref, RefBasic, tripleEquals } from '@metsci/gleam-util';
+import { Disposer, DisposerGroup, equal, FireableListenable, IMMEDIATE, Interval1D, Interval2D, isDefined, Nullable, Ref, RefBasic, tripleEquals, X, Y } from '@metsci/gleam-util';
 import { Axis1D, Context, createAxisCursorInputHandler1D, Painter, Pane } from '../../core';
-import { Color, createDomPeer, cssColor, cssFloat, currentDpr, disableBlending, enablePremultipliedAlphaBlending, GL, glScissor, glViewport, Interval1D, Interval2D, PeerType, pushBufferToDevice_BYTES, putAlignedBox, putRgba, StyleProp, ValueBase2, X, xPixelToNdc, Y, yUpwardPixelToNdc } from '../../support';
+import { Color, createDomPeer, cssColor, cssFloat, currentDpr, disableBlending, enablePremultipliedAlphaBlending, GL, glScissor, glViewport, PeerType, pushBufferToDevice_BYTES, putAlignedBox, putRgba, StyleProp, ValueBase2, xPixelToNdc, yUpwardPixelToNdc } from '../../support';
 import { tickOffsetEpsilon_PX } from '../axisPainter/painter';
 
 import fragShader_GLSL from './shader.frag';

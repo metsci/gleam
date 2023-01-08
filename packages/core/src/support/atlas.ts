@@ -26,8 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { arraySortStable, equal, Nullable, requireDefined } from '@metsci/gleam-util';
-import { Interval2D, Size2D } from './interval';
+import { arraySortStable, equal, Interval2D, Nullable, requireDefined, Size2D } from '@metsci/gleam-util';
 
 export interface Sized2D {
     readonly w: number;
@@ -330,24 +329,24 @@ export interface AnchoredImage {
     /**
      * Anchor x-coord relative to the entire image, including the border.
      */
-    readonly xAnchor: number,
+    readonly xAnchor: number;
 
     /**
      * Anchor y-coord relative to the entire image, including the border.
      */
-    readonly yAnchor: number,
+    readonly yAnchor: number;
 
     /**
      * Number of pixels around the edges of the image that do not hold
      * meaningful values, but are there to mitigate edge effects -- e.g.
      * when interpolating a color between two pixels.
      */
-    readonly border: number,
+    readonly border: number;
 
     /**
      * Image data for the entire image, including the border.
      */
-    readonly imageData: ImageData,
+    readonly imageData: ImageData;
 }
 
 export class Atlas<K> {

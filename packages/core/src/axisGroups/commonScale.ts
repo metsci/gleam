@@ -26,23 +26,28 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ActivityListenable, ActivityListenableBasic, Disposer, nextUpFloat64, Nullable } from '@metsci/gleam-util';
+import { ActivityListenable, ActivityListenableBasic, Disposer, Interval1D, nextUpFloat64, Nullable, Point2D, x, y } from '@metsci/gleam-util';
 import { Axis1D, Axis2D, AxisGroup1D, AxisGroupMember1D, AxisState1D } from '../core';
-import { Interval1D, Point2D, x, y } from '../support';
 import { isfn, isnum } from '../util';
 import { combineAxisConstraints, combineConstraints, isValidSpanLpx, isValidTieCoord, minMaxConstraintsToSpan, spanConstraintToScale } from './commonBounds';
 
-export function createCommonScaleAxis1D( tieFrac: number = 0.5,
-                                         tieCoord: number = 0.0,
-                                         scale: number = 250 ): Axis1D {
+export function createCommonScaleAxis1D(
+    tieFrac: number = 0.5,
+    tieCoord: number = 0.0,
+    scale: number = 250,
+): Axis1D {
     return new Axis1D( new CommonScaleAxisGroup1D( tieFrac, tieCoord, scale ) );
 }
 
-export function createCommonScaleAxis2D( tieFrac: Point2D | [number,number] = [ 0.5, 0.5 ],
-                                         tieCoord: Point2D | [number,number] = [ 0.0, 0.0 ],
-                                         scale: Point2D | [number,number] = [ 250, 250 ] ): Axis2D {
-    return new Axis2D( createCommonScaleAxis1D( x( tieFrac ), x( tieCoord ), x( scale ) ),
-                       createCommonScaleAxis1D( y( tieFrac ), y( tieCoord ), y( scale ) ) );
+export function createCommonScaleAxis2D(
+    tieFrac: Point2D | [number,number] = [ 0.5, 0.5 ],
+    tieCoord: Point2D | [number,number] = [ 0.0, 0.0 ],
+    scale: Point2D | [number,number] = [ 250, 250 ],
+): Axis2D {
+    return new Axis2D(
+        createCommonScaleAxis1D( x( tieFrac ), x( tieCoord ), x( scale ) ),
+        createCommonScaleAxis1D( y( tieFrac ), y( tieCoord ), y( scale ) ),
+    );
 }
 
 export function lockScaleRatio( axisAB: Axis2D, ratio: number ): void;
@@ -125,9 +130,11 @@ export class CommonScaleAxisGroup1D implements AxisGroup1D {
     }
 
     /**
-     * Call reconstrain() after calling this method.
+     * Intended usage is for client code to call `Axis1D.link()`, not to call this
+     * method directly. If you do call this method directly, call `reconstrain()`
+     * afterwards.
      */
-    addMember( axis: AxisGroupMember1D ): Disposer {
+    _addMember( axis: AxisGroupMember1D ): Disposer {
         if ( this.axes.has( axis ) ) {
             throw new Error( 'This axis is already a member of this group' );
         }

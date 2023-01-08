@@ -37,7 +37,7 @@ const MM_TO_RAD = 2*PI / xWrapSpan_MM;
 it( 'splitX', ( ) => {
     const proj = MERCATOR_PROJ;
 
-    const xWrapSpan = proj.xSpan( );
+    const xWrapSpan = proj.xSpan;
     const PROJ_TO_MM = xWrapSpan_MM / xWrapSpan;
     const splitX = createXSplitter( xWrapSpan );
     function expectXSplitMatch( lon_RAD: number ): void {

@@ -1,5 +1,5 @@
-import { addCssLink, attachPane, axisBoundsFn, BarAxisWidget, CET_L04, CET_L06, CET_L07, CET_L08, CET_L17, CET_L19, CET_L20, createCommonBoundsAxis1D, createCommonScaleAxis2D, createInsetPane, createTagOrderConstraint, EAST, EdgeAxisWidget, gleamCoreDefaultStyleLoading, GradientPainter, GridPainter, INFERNO, JET_LEGACY, LinearTicker, onFirstFewLayouts, PLASMA, Plot, ScatterPainter, SolidPainter, SOUTH, tagBoundsFn, TagMap, TextAtlasCache, VIRIDIS, WEST, Y } from '@metsci/gleam-core';
-import { activityListenable, IMMEDIATE, ListenableBasic, requireNonNull, run } from '@metsci/gleam-util';
+import { addCssLink, attachPane, axisBoundsFn, BarAxisWidget, CET_L04, CET_L06, CET_L07, CET_L08, CET_L17, CET_L19, CET_L20, createCommonBoundsAxis1D, createCommonScaleAxis2D, createInsetPane, createTagOrderConstraint, EAST, EdgeAxisWidget, gleamCoreDefaultStyleLoading, GradientPainter, GridPainter, INFERNO, JET_LEGACY, LinearTicker, onFirstFewLayouts, PLASMA, Plot, ScatterPainter, SolidPainter, SOUTH, tagBoundsFn, TagMap, TextAtlasCache, VIRIDIS, WEST } from '@metsci/gleam-core';
+import { activityListenable, IMMEDIATE, ListenableBasic, requireNonNull, run, Y } from '@metsci/gleam-util';
 import { generateXycsCoords } from './misc';
 
 // Resolve relative URLs at load-time, in case a polyfill relies on document.currentScript
@@ -15,7 +15,7 @@ run( async ( ) => {
     // Create a listenable that can be fired by application code to trigger a repaint
     const repaint = new ListenableBasic( );
 
-    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be quite slow
+    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be slow
     const textAtlasCache = new TextAtlasCache( );
 
     // Create axes for x, y, color, and size

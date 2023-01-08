@@ -26,12 +26,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { appendChild, Disposer, Supplier } from '@metsci/gleam-util';
+import { appendChild, Disposer, getOrthogonalDim, Supplier, X, Y } from '@metsci/gleam-util';
 import { attachAxisInputHandlers1D, attachAxisViewportUpdater1D, Axis1D, createAxisZoomersAndPanners1D, createTagsInputHandler1D, maskedInputHandler, Painter, Pane, TagMap, Ticker } from '../core';
 import { ChildlessLayout } from '../layouts/childlessLayout';
 import { AxisPainter } from '../painters/axisPainter';
 import { BarAxisPainter } from '../painters/barAxisPainter';
-import { createDomPeer, cssFloat, currentDpr, EAST, Edge, getOrthogonalDim, PeerType, StyleProp, tagCoordsFn, TextAtlasCache, WEST, X, Y } from '../support';
+import { createDomPeer, cssFloat, currentDpr, EAST, Edge, PeerType, StyleProp, tagCoordsFn, TextAtlasCache, WEST } from '../support';
 import { LinearTicker } from '../tickers/linearTicker';
 
 export class EdgeAxisWidget {
@@ -41,11 +41,12 @@ export class EdgeAxisWidget {
     readonly pane: Pane;
 
     /**
-     * The `labelEdge` arg indicates which edge of the pane the axis label will be on.
+     * `axisLabelEdge` indicates which edge the *axis label* will be on. Tick
+     * marks will face the *opposite* edge.
      */
     constructor(
         axis: Axis1D,
-        labelEdge: Edge,
+        axisLabelEdge: Edge,
         options?: {
             createTicker?: Supplier<Ticker>,
             textAtlasCache?: TextAtlasCache,
@@ -55,7 +56,7 @@ export class EdgeAxisWidget {
 
         this.painter = new AxisPainter(
             this.axis,
-            labelEdge,
+            axisLabelEdge,
             options?.createTicker ?? ( ( ) => new LinearTicker( ) ),
             options?.textAtlasCache,
         );
@@ -65,7 +66,7 @@ export class EdgeAxisWidget {
         layout.prefWidth_LPX.getOverride = ( ) => this.painter.getPrefSize_PX( ).w / currentDpr( this.pane );
         layout.prefHeight_LPX.getOverride = ( ) => this.painter.getPrefSize_PX( ).h / currentDpr( this.pane );
 
-        this.axisType = ( labelEdge === EAST || labelEdge === WEST ? Y : X );
+        this.axisType = ( axisLabelEdge === EAST || axisLabelEdge === WEST ? Y : X );
         this.pane = new Pane( layout );
         this.pane.addCssClass( 'edge-axis' );
         this.pane.addCssClass( `${( this.axisType === Y ? 'y' : 'x' )}-edge-axis` );
@@ -98,11 +99,11 @@ export class BarAxisWidget {
     readonly pane: Pane;
 
     /**
-     * The `ticksEdge` arg determines which edge of the pane the ticks will face.
+     * `axisLabelEdge` indicates which edge the *axis label* will be on.
      */
     constructor(
         axis: Axis1D,
-        labelEdge: Edge,
+        axisLabelEdge: Edge,
         options?: {
             createTicker?: Supplier<Ticker>,
             tags?: TagMap,
@@ -114,7 +115,7 @@ export class BarAxisWidget {
 
         this.painter = new BarAxisPainter(
             this.axis,
-            labelEdge,
+            axisLabelEdge,
             options?.createTicker ?? ( ( ) => new LinearTicker( ) ),
             options?.tags && tagCoordsFn( options.tags ),
             options?.barPainters,
@@ -126,7 +127,7 @@ export class BarAxisWidget {
         layout.prefWidth_LPX.getOverride = ( ) => this.painter.getPrefSize_PX( ).w / currentDpr( this.pane );
         layout.prefHeight_LPX.getOverride = ( ) => this.painter.getPrefSize_PX( ).h / currentDpr( this.pane );
 
-        this.axisType = ( labelEdge === EAST || labelEdge === WEST ? Y : X );
+        this.axisType = ( axisLabelEdge === EAST || axisLabelEdge === WEST ? Y : X );
         this.pane = new Pane( layout );
         appendChild( this.pane.peer, this.peer );
         this.pane.addCssClass( 'bar-axis' );

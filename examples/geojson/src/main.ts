@@ -1,7 +1,7 @@
-import { addCssLink, attachAxisInputHandlers2D, attachAxisViewportUpdater2D, attachPane, axisBoundsFn, createCommonScaleAxis2D, gleamCoreDefaultStyleLoading, Interval1D, lockScaleRatio, Pane } from '@metsci/gleam-core';
+import { addCssLink, attachAxisInputHandlers2D, attachAxisViewportUpdater2D, attachPane, axisBoundsFn, createCommonScaleAxis2D, gleamCoreDefaultStyleLoading, lockScaleRatio, Pane } from '@metsci/gleam-core';
 import { addCssClass, createPreRenderableFactory, createPreRenderablesWorkerPool, GeoJsonMarkerPin, GeoJsonPainter } from '@metsci/gleam-geojson';
 import { addMvtAttributionElement, createCacheWorkerPool, createRenderGroupsFactory, fetchTileSetToc, gleamMvtDefaultStyleLoading, MvtCache, MvtPainter } from '@metsci/gleam-mvt';
-import { ListenableBasic, MERCATOR_PROJ, requireNonNull, run, SPHERICAL_GREAT_CIRCLE_INTERPOLATOR, SPHERICAL_RHUMB_LINE_INTERPOLATOR } from '@metsci/gleam-util';
+import { Interval1D, ListenableBasic, MERCATOR_PROJ, requireNonNull, run, SPHERICAL_GREAT_CIRCLE_INTERPOLATOR, SPHERICAL_RHUMB_LINE_INTERPOLATOR } from '@metsci/gleam-util';
 import { antimeridianFeatures, polarFeatures, simpleFeatures } from './data';
 
 const { PI } = Math;
@@ -25,8 +25,8 @@ run( async ( ) => {
     const proj = MERCATOR_PROJ;
     const xyAxis = createCommonScaleAxis2D( );
     lockScaleRatio( xyAxis, 1 );
-    xyAxis.y.maxConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, proj.maxUsableY( ) );
-    xyAxis.y.minConstraint = Interval1D.fromEdges( proj.minUsableY( ), POSITIVE_INFINITY );
+    xyAxis.y.maxConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, proj.maxUsableY );
+    xyAxis.y.minConstraint = Interval1D.fromEdges( proj.minUsableY, POSITIVE_INFINITY );
     xyAxis.y.scaleConstraint = Interval1D.fromEdges( NEGATIVE_INFINITY, 1e7*proj.maxDLatDY_RAD( ) );
     xyAxis.x.set( false, proj.lonToX( -PI ), proj.lonToX( +PI ) );
     xyAxis.changes.addListener( ( ) => {

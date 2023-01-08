@@ -1,5 +1,5 @@
-import { addCssLink, attachBasicLineInputHandler, attachPane, axisBoundsFn, BasicLinePainter, createCommonBoundsAxis2D, createInsetPane, EdgeAxisWidget, frozenSupplier, gleamCoreDefaultStyleLoading, GridPainter, Interval1D, isBasicLinePoint, LinearTicker, PaneMouseEvent, Plot, SOUTH, TextAtlasCache, TooltipDiv, WEST } from '@metsci/gleam-core';
-import { appendChild, ListenableBasic, requireNonNull, run } from '@metsci/gleam-util';
+import { addCssLink, attachBasicLineInputHandler, attachPane, axisBoundsFn, BasicLinePainter, createCommonBoundsAxis2D, createInsetPane, EdgeAxisWidget, frozenSupplier, gleamCoreDefaultStyleLoading, GridPainter, isBasicLinePoint, LinearTicker, PaneMouseEvent, Plot, SOUTH, TextAtlasCache, TooltipDiv, WEST } from '@metsci/gleam-core';
+import { appendChild, Interval1D, ListenableBasic, requireNonNull, run } from '@metsci/gleam-util';
 
 // Resolve relative URLs at load-time, in case a polyfill relies on document.currentScript
 const mainCssUrl = new URL( './main.css', import.meta.url );
@@ -14,7 +14,7 @@ run( async ( ) => {
     // Create a listenable that can be fired by application code to trigger a repaint
     const repaint = new ListenableBasic( );
 
-    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be quite slow
+    // Create a shared TextAtlasCache to avoid duplicating text rasterization, which can be slow
     const textAtlasCache = new TextAtlasCache( );
 
     // Create axes
