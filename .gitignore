@@ -1,0 +1,68 @@
+# Maven
+target/
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# NetBeans
+nbproject/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Visual Studio Code
+*.code-workspace
+.vscode/launch.json
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Ant
+build/
+
+# Matlab
+*.asv
+*.m~
+*.mex*
+slprj/
+
+# Vim
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# SVN
+.svn
+
+# HotSpot
+hs_err*.log
+
+# Web backends
+.vertx/
+.cache-main/
+
+# Web frontends
+node_modules/
+dist/
+.rpt2_cache/
+.parcel-cache/
+*.tsbuildinfo
+
+# Tarballs created by `npm pack`
+*.tgz
+
+# Do NOT ignore Maven module subdirs called "dist"
+!**/src/main/dist/
+
+# Deployed copies of frontends
+**/backend/src/main/resources/frontend/

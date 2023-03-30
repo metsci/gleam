@@ -1,0 +1,35 @@
+{
+  "name": "@metsci/rollup-plugin-asset",
+  "version": "1.0.0-rc.0",
+  "author": "Metron, Inc.",
+  "license": "BSD 3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metsci/gleam.git"
+  },
+  "main": "./build/dist/index.js",
+  "module": "./build/dist/index.es.js",
+  "files": [
+    "./build/dist/**"
+  ],
+  "scripts": {
+    "clean": "shx rm -rf ./build",
+    "cleanDeps": "shx rm -rf ./node_modules",
+    "cleanFull": "npm run clean && npm run cleanDeps",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^2.79.1",
+    "shx": "^0.3.4"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^23.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/pluginutils": "^5.0.2",
+    "estree-walker": "^3.0.1",
+    "magic-string": "^0.26.7"
+  },
+  "peerDependencies": {
+    "rollup": "^2.0.0"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+
+    "module": "es2020",
+    "target": "es2017",
+    "sourceMap": true,
+
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "allowJs": false,
+    "alwaysStrict": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "removeComments": false,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": true
+  }
+}

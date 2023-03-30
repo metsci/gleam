@@ -1,0 +1,137 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#main-div {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 100%;
+
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#main-div gleam-pane.geo-inset > fill-painter.background,
+#main-div gleam-pane.timeline-inset > fill-painter.background {
+    --color: #242424;
+}
+#main-div gleam-pane.geo-view > fill-painter.background,
+#main-div gleam-pane.timeline-view > fill-painter.background {
+    --color: #000000;
+}
+#main-div axis-painter {
+    --text-color: #D8D8D8;
+    --tick-color: rgb( 100,100,100 );
+}
+#main-div grid-painter {
+    --major-color: rgb( 80,80,80 );
+    --minor-color: rgb( 35,35,35 );
+}
+#main-div cursor-painter {
+    --inner-color: rgba( 0,220,255, 1.0 );
+    --edge-color: rgba( 0,220,255, 0.4 );
+    --inner-color-hovered: rgba( 0,220,255, 1.0 );
+    --edge-color-hovered: rgba( 0,220,255, 0.4 );
+}
+
+gleam-pane.geo-inset > inset-layout {
+    --inset-px: 10 10 5 10;
+}
+gleam-pane.timeline-inset > inset-layout {
+    --inset-px: 5 10 10 10;
+}
+gleam-pane.timeline-inset > site-in-parent {
+    --row-height: rigid( 38% );
+}
+#main-div .mvt-attribution {
+    left: 11px;
+    bottom: calc( 38% + 5px );
+}
+#main-div .mvt-attribution,
+#main-div .mvt-attribution *,
+#main-div .mvt-attribution a:visited {
+    color: rgb( 192,192,192 );
+    text-shadow: none;
+}
+#main-div .mvt-attribution a {
+    display: block;
+}
+#main-div .instructions {
+    position: absolute;
+    left: 11px;
+    top: 11px;
+    font: 15px sans-serif;
+    color: rgb( 0,220,255 );
+}
+
+gleam-pane.geo-view scatter-painter,
+gleam-pane.timeline-view scatter-painter {
+    --shape: disc;
+    --fixed-size-px: 12;
+}
+gleam-pane.geo-view scatter-painter {
+    --variable-color-table: green-with-triangular-alpha;
+}
+gleam-pane.timeline-view scatter-painter {
+    --fixed-color: rgb( 0,255,0 );
+}
+
+.gleam .dot-hovered,
+.gleam .dot-dragged {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Water, land, borders, etc. */
+#main-div mvt-painter {
+    --render-groups:
+        background_area,
+        water_area,
+        water_intermittent_area,
+        waterway_line,
+        waterway_intermittent_line,
+        countryborder_line,
+        countryborder_maritime_line,
+        countryborder_disputed_line,
+        countryborder_disputed_maritime_line;
+}
+#main-div mvt-painter feature-style.background_area {
+    --fill-color: rgb( 100,100,100 );
+}
+#main-div mvt-painter feature-style.water_area {
+    --fill-color: rgb( 0,0,0 );
+}
+#main-div mvt-painter feature-style.waterway_line {
+    --line-color: rgb( 0,0,0 );
+}
+#main-div mvt-painter feature-style.water_intermittent_area {
+    --fill-color: rgb( 32,32,32 );
+}
+#main-div mvt-painter feature-style.waterway_intermittent_line {
+    --line-color: rgb( 32,32,32 );
+}
+/* TODO: Use a different style for disputed borders */
+#main-div mvt-painter feature-style.countryborder_line,
+#main-div mvt-painter feature-style.countryborder_disputed_line,
+#main-div mvt-painter feature-style.countryborder_maritime_line,
+#main-div mvt-painter feature-style.countryborder_disputed_maritime_line {
+    --line-color: rgb( 160,160,160 );
+    --line-thickness-px: 1;
+}

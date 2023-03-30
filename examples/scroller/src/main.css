@@ -1,0 +1,62 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#host {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#content > rows-layout {
+    --top-to-bottom: true;
+}
+
+#content gleam-pane.label > site-in-parent {
+    --rigid-row-height: pref;
+}
+#content gleam-pane.label > inset-layout {
+    --inset-px: 11px;
+}
+#content gleam-pane.label > image-painter {
+    --x-align-viewport-frac: 0;
+    --x-align-image-coord: 0;
+    --y-align-viewport-frac: 0.5;
+    --y-align-image-coord: 0.5;
+}
+#content gleam-pane.label:first-of-type > border-painter {
+    --color: cyan;
+    --width-px: 2;
+}
+#content gleam-pane.label:nth-of-type( odd ) > fill-painter.background {
+    --color: black;
+}
+#content gleam-pane.label:nth-of-type( even ) > fill-painter.background {
+    --color: rgb( 192, 192, 192 );
+}
+#content gleam-pane.label:nth-of-type( odd ) image-painter {
+    --color: rgb( 192, 192, 192 );
+}
+#content gleam-pane.label:nth-of-type( even ) image-painter {
+    --color: black;
+}
+#content gleam-pane.label:last-of-type > border-painter {
+    --color: red;
+    --width-px: 2;
+}

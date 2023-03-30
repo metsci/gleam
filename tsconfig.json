@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/util" },
+    { "path": "./packages/core" },
+    { "path": "./packages/timeline" },
+    { "path": "./packages/geojson" },
+    { "path": "./packages/mvt" },
+    { "path": "./examples/geojson" },
+    { "path": "./examples/grid" },
+    { "path": "./examples/heatmap" },
+    { "path": "./examples/histogram" },
+    { "path": "./examples/line" },
+    { "path": "./examples/mvc" },
+    { "path": "./examples/mvt" },
+    { "path": "./examples/scatter" },
+    { "path": "./examples/scroller" },
+    { "path": "./examples/timeline" }
+  ]
+}

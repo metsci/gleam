@@ -1,0 +1,51 @@
+{
+  "name": "@metsci/gleam-example-mvc",
+  "version": "1.0.0-rc.1",
+  "description": "Gleam MVC example",
+  "author": "Metron, Inc.",
+  "license": "BSD 3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metsci/gleam.git"
+  },
+  "private": true,
+  "browser": "./build/dist/main.js",
+  "files": [
+    "build/dist/**"
+  ],
+  "scripts": {
+    "clean": "shx rm -rf ./build",
+    "cleanDeps": "shx rm -rf ./node_modules",
+    "cleanFull": "run-s clean cleanDeps",
+    "build": "run-s build:resources build:compile build:bundle build:static",
+    "build:resources": "cpx \"src/**/*.{vert,frag,css}\" build/temp -v",
+    "build:compile": "tsc --build --verbose",
+    "build:bundle": "rollup --config ./rollup.config.js",
+    "build:static": "cpx \"src/**/*.{html,ico}\" build/dist -v",
+    "watch": "run-p -cl watch:resources watch:compile watch:bundle watch:static",
+    "watch:resources": "cpx \"src/**/*.{vert,frag,css}\" build/temp -v --watch",
+    "watch:compile": "tsc --build --verbose --watch --pretty",
+    "watch:bundle": "rollup --config ./rollup.config.js --watch --waitForBundleInput",
+    "watch:static": "cpx \"src/**/*.{html,ico}\" build/dist -v --watch"
+  },
+  "devDependencies": {
+    "@metsci/rollup-plugin-asset": "*",
+    "@rollup/plugin-commonjs": "*",
+    "@rollup/plugin-replace": "*",
+    "@rollup/plugin-node-resolve": "*",
+    "cpx2": "*",
+    "npm-run-all": "*",
+    "rollup": "*",
+    "rollup-plugin-sourcemaps": "*",
+    "rollup-plugin-string": "*",
+    "shx": "*",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "@metsci/gleam-core": "*",
+    "@metsci/gleam-mvt": "*",
+    "@metsci/gleam-timeline": "*",
+    "@metsci/gleam-util": "*",
+    "immutable": "*"
+  }
+}

@@ -1,0 +1,76 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#host {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#host > gleam-pane > grid-layout {
+    --top-to-bottom: true;
+}
+
+#host gleam-pane.row-label > site-in-parent {
+    --column-width: rigid( 250px );
+    --row-height: rigid( 50px );
+}
+#host gleam-pane.row-label > fill-painter.background {
+    --color: lightgray;
+}
+#host gleam-pane.row-label > border-painter {
+    --color: darkgray;
+    --width-px: 1;
+}
+#host gleam-pane.row-label image-painter {
+    --x-align-image-coord: 0.5;
+    --x-align-viewport-frac: 0.5;
+    --y-align-image-coord: 0.5;
+    --y-align-viewport-frac: 0.5;
+    --font: 20px sans-serif;
+}
+
+#host gleam-pane.row-data > site-in-parent {
+    --row-height: rigid( 50px );
+}
+#host gleam-pane.row-data > fill-painter.background {
+    --color: black;
+}
+#host gleam-pane.row-data > border-painter {
+    --color: darkgray;
+    --width-px: 1;
+}
+#host gleam-pane.row-data image-painter {
+    --x-align-image-coord: 0.5;
+    --x-align-viewport-frac: 0.5;
+    --y-align-image-coord: 0.5;
+    --y-align-viewport-frac: 0.5;
+    --font: 20px sans-serif;
+    --color: lightgray;
+}
+
+#host gleam-pane.row-data.flex-height > site-in-parent {
+    --row-height: flex( 100px, pref );
+}
+
+#host gleam-pane.row-data.alert > border-painter {
+    --color: red;
+    --width-px: 4;
+}
