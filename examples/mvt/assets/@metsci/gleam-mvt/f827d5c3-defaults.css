@@ -1,0 +1,98 @@
+.mvt-attribution {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 2px 4px 0 3px;
+    font: 13px sans-serif;
+}
+.mvt-attribution,
+.mvt-attribution *,
+.mvt-attribution a:visited {
+    color: rgb( 255,255,255 );
+    text-shadow: rgb( 0,0,0 ) 0 0 5px;
+    text-decoration: none;
+}
+
+.gleam mvt-painter {
+    --render-groups:
+        background_area,
+        globallandcover_snow_area,
+        globallandcover_grass_area,
+        globallandcover_forest_area,
+        globallandcover_crop_area,
+        globallandcover_scrub_area,
+        globallandcover_tree_area,
+        landcover_ice_area,
+        landcover_glacier_area,
+        landcover_sand_area,
+        landcover_grass_area,
+        landcover_crop_area,
+        landcover_farmland_area,
+        landcover_tree_area,
+        landcover_wood_area,
+        landcover_forest_area,
+        water_area,
+        water_intermittent_area,
+        waterway_line,
+        waterway_intermittent_line,
+        countryborder_line,
+        countryborder_maritime_line,
+        countryborder_disputed_line,
+        countryborder_disputed_maritime_line;
+}
+.gleam mvt-painter feature-style.background_area {
+    --fill-color: rgb( 230,215,165 );
+}
+.gleam mvt-painter feature-style.landcover_sand_area {
+    --fill-color: rgb( 230,215,165 );
+}
+.gleam mvt-painter feature-style.landcover_rock_area {
+    --fill-color: rgb( 230,215,165 );
+}
+.gleam mvt-painter feature-style.landcover_grass_area,
+.gleam mvt-painter feature-style.globallandcover_grass_area {
+    --fill-color: rgb( 110,192,0 );
+}
+.gleam mvt-painter feature-style.globallandcover_crop_area,
+.gleam mvt-painter feature-style.landcover_farmland_area {
+    --fill-color: rgb( 200,180,64 );
+}
+.gleam mvt-painter feature-style.landcover_wood_area,
+.gleam mvt-painter feature-style.globallandcover_tree_area,
+.gleam mvt-painter feature-style.globallandcover_forest_area {
+    --fill-color: rgb( 32,128,45 );
+}
+.gleam mvt-painter feature-style.landcover_wetland_area {
+    --fill-color: rgb( 60,150,0 );
+}
+.gleam mvt-painter feature-style.globallandcover_scrub_area {
+    --fill-color: rgb( 150,130,32 );
+}
+.gleam mvt-painter feature-style.landcover_ice_area,
+.gleam mvt-painter feature-style.landcover_glacier_area,
+.gleam mvt-painter feature-style.globallandcover_snow_area {
+    --fill-color: rgb( 255,255,255 );
+}
+.gleam mvt-painter feature-style.water_area {
+    --fill-color: rgb( 0,75,150 );
+}
+.gleam mvt-painter feature-style.waterway_line {
+    --line-color: rgb( 0,75,150 );
+}
+.gleam mvt-painter feature-style.water_intermittent_area {
+    --fill-color: rgb( 90,115,190 );
+}
+.gleam mvt-painter feature-style.waterway_intermittent_line {
+    --line-color: rgb( 90,115,190 );
+}
+/* TODO: Use a different style for disputed borders */
+.gleam mvt-painter feature-style.countryborder_line,
+.gleam mvt-painter feature-style.countryborder_disputed_line {
+    --line-color: rgb( 64,64,0 );
+    --line-thickness-px: 0.65;
+}
+/* TODO: Use a different style for disputed borders */
+.gleam mvt-painter feature-style.countryborder_maritime_line,
+.gleam mvt-painter feature-style.countryborder_disputed_maritime_line {
+    --line-color: rgb( 90,115,190 );
+}

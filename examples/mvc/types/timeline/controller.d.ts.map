@@ -1,0 +1,1 @@
+{"version":3,"file":"controller.d.ts","sourceRoot":"","sources":["../../../../src/timeline/controller.ts"],"names":[],"mappings":"AACA,OAAO,EAAsB,QAAQ,EAAiB,kBAAkB,EAAoC,MAAM,oBAAoB,CAAC;AAEvI,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AACjC,OAAO,EAAE,YAAY,EAAE,MAAM,QAAQ,CAAC;AAItC,wBAAgB,wBAAwB,CAAE,KAAK,EAAE,KAAK,EAAE,IAAI,EAAE,YAAY,EAAE,OAAO,EAAE,kBAAkB,GAAI,QAAQ,CA8ClH"}

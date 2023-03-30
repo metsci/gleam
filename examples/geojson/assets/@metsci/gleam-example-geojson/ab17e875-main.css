@@ -1,0 +1,121 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#host {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#host .mvt-attribution,
+#host .mvt-attribution *,
+#host .mvt-attribution a:visited {
+    color: rgb( 64,64,0 );
+    text-shadow: none;
+}
+#host .mvt-attribution a {
+    display: block;
+}
+
+/* GeoJSON marker definitions */
+#host geojson-marker-pin.pin1 {
+    --fill-color: rgb( 255,0,0 );
+    --stroke-color: rgb( 0,0,0 );
+}
+#host geojson-marker-pin.pin2 {
+    --fill-color: rgb( 105,143,255 );
+    --stroke-color: rgb( 0,0,0 );
+}
+#host geojson-marker-pin.pin3 {
+    --fill-color: rgb( 105,225,143 );
+    --stroke-color: rgb( 0,0,0 );
+}
+
+/* GeoJSON objects, simple */
+#host geojson-markers-renderable {
+    --marker: pin1;
+}
+#host geojson-polygons-renderable {
+    --fill-color: rgba( 255,255,255, 0.4 );
+    --stroke-color: rgb( 0,0,0 );
+    --stroke-width-px: 2;
+}
+
+/* GeoJSON objects, antimeridian */
+#host geojson-markers-renderable.antimeridian {
+    --marker: pin2;
+}
+#host geojson-lines-renderable.antimeridian {
+    --color: rgb( 115,171,115 );
+    --width-px: 2;
+}
+#host geojson-polygons-renderable.antimeridian {
+    --fill-color: rgba( 0,0,0, 0.2 );
+    --stroke-color: rgb( 0,0,0 );
+    --stroke-width-px: 1;
+}
+
+/* GeoJSON objects, polar */
+#host geojson-lines-renderable.polar {
+    --color: rgb( 100,0,255 );
+    --width-px: 1;
+}
+#host geojson-polygons-renderable.polar {
+    --fill-color: rgba( 255,0,0, 0.2 );
+    --stroke-color: rgb( 255,0,0 );
+    --stroke-width-px: 2;
+}
+
+/* Water, land, borders, etc. */
+#host mvt-painter {
+    --render-groups:
+        background_area,
+        water_area,
+        water_intermittent_area,
+        waterway_line,
+        waterway_intermittent_line,
+        countryborder_line,
+        countryborder_maritime_line,
+        countryborder_disputed_line,
+        countryborder_disputed_maritime_line;
+}
+#host mvt-painter feature-style.background_area {
+    --fill-color: rgb( 230,215,165 );
+}
+#host mvt-painter feature-style.water_area,
+#host mvt-painter feature-style.water_intermittent_area {
+    --fill-color: rgb( 255,255,255 );
+}
+#host mvt-painter feature-style.waterway_line,
+#host mvt-painter feature-style.waterway_intermittent_line {
+    --line-color: rgb( 255,255,255 );
+}
+/* TODO: Use a different style for disputed borders */
+#host mvt-painter feature-style.countryborder_line,
+#host mvt-painter feature-style.countryborder_disputed_line {
+    --line-color: rgb( 185,155,52 );
+    --line-thickness-px: 0.65;
+}
+/* TODO: Use a different style for disputed borders */
+#host mvt-painter feature-style.countryborder_maritime_line,
+#host mvt-painter feature-style.countryborder_disputed_maritime_line {
+    --line-color: rgb( 175,175,175 );
+    --line-thickness-px: 0.65;
+}

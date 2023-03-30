@@ -1,0 +1,91 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#host {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#host gleam-pane.timeline-row-data.parent-of--line-plot > site-in-parent,
+#host gleam-pane.timeline-row-data.parent-of--scatter-plot > site-in-parent,
+#host gleam-pane.timeline-row-data.parent-of--heatmap-plot > site-in-parent {
+    --row-height: flex( 100px, 222px );
+}
+
+#host gleam-pane.timeline-row-data .line-plot basic-line-painter {
+    --line-color: rgb( 0,200,118 );
+    --line-thickness-px: 2;
+
+    --fill-mode: vertical;
+    --fill-color: rgba( 0,200,118, 0.17 );
+    --fill-baseline: 0;
+
+    --dot-mode: all;
+    --dot-diameter-px: 0;
+    --offscreen-data-indicator-y: on;
+    --offscreen-data-indicator-diameter-px: 3;
+}
+
+#host gleam-pane.timeline-row-data bar-axis-widget {
+    --axis-inset-px: 7;
+}
+#host gleam-pane.timeline-row-data bar-axis-painter > fill-painter.background {
+    --color: rgba( 255,255,255, 0.6 );
+}
+
+#host gleam-pane.timeline-row-data timeline-event-style {
+    --bar-margin-top-px: 12;
+    --bar-margin-bottom-px: 0;
+    --label-font: 11px sans-serif;
+    --label-offset-x-px: 3;
+    --label-offset-y-px: 10;
+    --label-allow-overshoot: true;
+}
+
+#host gleam-pane.timeline-row-data timeline-event-style.alert {
+    --bar-margin-top-px: 0;
+    --bar-margin-bottom-px: 0;
+    --label-font: bold 13px sans-serif;
+    --label-offset-x-px: 3;
+    --label-offset-y-px: 6;
+    --label-allow-overshoot: false;
+}
+#host gleam-pane.timeline-row-data timeline-event-style.alert {
+    --bar-fill-pattern: striped;
+}
+#host gleam-pane.timeline-row-data timeline-event-style.alert > striped-pattern {
+    --angle-mathdeg: 45;
+    --stripes: 5px rgb(241,97,93), 5px rgb(253,155,106);
+}
+#host gleam-pane.timeline-row-data timeline-event-style.alert.hovered > striped-pattern {
+    --stripes: 5px rgb(246,150,147), 5px rgb(254,188,156);
+}
+
+#host gleam-pane.scatter-plot scatter-painter {
+    --variable-color-table: magma;
+}
+#host gleam-pane.scatter-plot bar-axis-painter gradient-painter {
+    --color-table: magma;
+}
+#host heatmap-painter,
+#host bar-axis-painter gradient-painter {
+    --color-table: magma;
+}

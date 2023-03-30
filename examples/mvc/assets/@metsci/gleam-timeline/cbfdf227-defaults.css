@@ -1,0 +1,117 @@
+.gleam time-ticker {
+    --approx-spacing-px: 100;
+    --timezone: UTC;
+}
+
+
+.gleam gleam-pane.timeline > rows-layout,
+.gleam gleam-pane.timeline-content > grid-layout {
+    --gap-between-rows-px: 1;
+    --gap-between-columns-px: 1;
+}
+
+.gleam gleam-pane.timeline > gleam-pane.north-axis > site-in-parent,
+.gleam gleam-pane.timeline > gleam-pane.south-axis > site-in-parent {
+    --row-height: rigid( pref );
+}
+.gleam gleam-pane.timeline > gleam-pane.north-axis time-ticker,
+.gleam gleam-pane.timeline > gleam-pane.south-axis time-ticker {
+    --timezone: UTC;
+}
+
+.gleam gleam-pane.timeline-row-label > site-in-parent,
+.gleam gleam-pane.timeline-row-data > site-in-parent {
+    --row-height: rigid( 30px );
+}
+
+.gleam gleam-pane.timeline-row-label > site-in-parent {
+    --column-width: rigid( pref );
+}
+.gleam gleam-pane.timeline-row-label-inset > inset-layout {
+    --inset-px: 10 7 0 7;
+}
+.gleam gleam-pane.timeline-row-label-symbol > inset-layout {
+    --inset-px: 0 4 0 0;
+}
+.gleam gleam-pane.timeline-row-label-symbol > site-in-parent,
+.gleam gleam-pane.timeline-row-label-name > site-in-parent {
+    --column-width: rigid( pref );
+}
+.gleam gleam-pane.timeline-row-label-symbol,
+.gleam gleam-pane.timeline-row-label-name {
+    --x-align-viewport-frac: 0;
+    --x-align-image-coord: 0;
+    --y-align-viewport-frac: 1;
+    --y-align-image-coord: 1;
+}
+
+.gleam gleam-pane.timeline-row-data.parent-of--timeline-events-row > site-in-parent {
+    --row-height: rigid( pref );
+}
+
+.gleam gleam-pane.timeline drag-site-painter {
+    --width-px: 3;
+}
+
+.gleam timeline-event-style {
+    --bar-margin-top-px: 0;
+    --bar-margin-bottom-px: 0;
+    --bar-border-width-px: 0;
+    --label-font: 13px sans-serif;
+    --label-offset-x-px: 3;
+    --label-offset-y-px: 6;
+    --label-allow-overshoot: false;
+}
+.gleam timeline-event-style.focused {
+    --bar-border-width-px: 1.85;
+}
+
+
+.gleam gleam-pane.timeline > fill-painter.background {
+    /* Shows through in gaps between rows, like grid lines */
+    --color: rgb( 200,200,200 );
+}
+
+.gleam gleam-pane.timeline > gleam-pane.north-axis > fill-painter.background,
+.gleam gleam-pane.timeline > gleam-pane.south-axis > fill-painter.background {
+    --color: white;
+}
+
+.gleam gleam-pane.timeline-row-label > fill-painter.background,
+.gleam gleam-pane.timeline-row-data > fill-painter.background {
+    --color: white;
+}
+
+.gleam gleam-pane.timeline-row-label-symbol image-painter,
+.gleam gleam-pane.timeline-row-label-name image-painter {
+    --color: rgb( 50, 50, 50 );
+}
+
+.gleam gleam-pane.timeline drag-site-painter {
+    --color: red;
+}
+
+.gleam timeline-event-style {
+    --label-color: rgb( 0,0,0 );
+    --bar-border-color: rgb( 50,50,50 );
+    --bar-fill-pattern: solid;
+}
+.gleam timeline-event-style.hovered {
+    --label-color: rgb( 85,85,85 );
+    --bar-border-color: rgb( 118,118,118 );
+}
+.gleam timeline-event-style > solid-pattern {
+    --color: rgb( 153,153,255 );
+}
+.gleam timeline-event-style.hovered > solid-pattern {
+    --color: rgb( 187,187,255 );
+}
+
+.gleam timeline-event-style > striped-pattern {
+    --angle-mathdeg: 45;
+    --lateral-shift-px: 0;
+    --stripes: 6px rgb(153,153,255), 6px rgb(187,187,255);
+}
+.gleam timeline-event-style.hovered > striped-pattern {
+    --stripes: 6px rgb(187,187,255), 6px rgb(210,210,255);
+}

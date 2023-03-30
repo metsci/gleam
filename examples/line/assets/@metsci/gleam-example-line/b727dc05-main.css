@@ -1,0 +1,66 @@
+html {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* remove browser scrollbars */
+}
+
+#host {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#host gleam-pane.content > inset-layout {
+    --inset-px: 20 20 20 20;
+}
+
+#host gleam-pane.plot-center > basic-line-painter {
+    --line-mode: straight;
+    --line-step-align: centered-on-datapoint;
+    --line-step-risers: on;
+    --line-color: rgb( 29, 185, 84 );
+    --line-thickness-px: 2;
+
+    --dot-mode: all;
+    --dot-color: rgb( 29, 185, 84 );
+    --dot-diameter-px: 8;
+
+    --fill-mode: off;
+    --fill-color: rgba( 29, 185, 84, 0.4 );
+    --fill-baseline: 0;
+
+    --offscreen-data-indicator-x: on;
+    --offscreen-data-indicator-y: on;
+    --offscreen-data-indicator-color: red;
+    --offscreen-data-indicator-diameter-px: 6;
+}
+
+#host gleam-pane.plot-center > basic-line-painter.hover-dot {
+    --line-mode: off;
+    --dot-diameter-px: 10.5;
+    --offscreen-data-indicator-diameter-px: 8;
+}
+
+#host .tooltip {
+    z-index: 999;
+    pointer-events: none;
+    font: 13px sans-serif;
+    background: rgba( 255, 255, 255, 0.7 );
+    padding: 0px 3px;
+    --x-offset-px: 3;
+    --y-offset-px: 3;
+}
