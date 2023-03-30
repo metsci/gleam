@@ -13,7 +13,7 @@ Gleam is designed around a handful of core concepts:
 
 ## Panes
 
-A [**pane**](../packages/core/src/core/pane.ts#L207) is an object that represents a rectangular region of the canvas.
+A [**pane**](../packages/core/src/core/pane.ts#L226) is an object that represents a rectangular region of the canvas.
 
 A pane can have a [layout](#layout), child panes, [painters](#painter), and [input handlers](#input-handler).
 
@@ -28,7 +28,7 @@ A pane can contain **child panes**. Positions and sizes of child panes within th
 
 Gleam has built-in general-purpose layouts [here](../packages/core/src/layouts/). Their params are set [via CSS](./styling.md).
 
-Sometimes an ad-hoc layout impl is a clean and easy way to get layout behavior tailored for your specific use-case. The layout interface is easy to implement, e.g. by extending the [`LayoutBase`](../packages/core/src/core/layout.ts#L66) class.
+Sometimes an ad-hoc layout impl is a clean and easy way to get layout behavior tailored for your specific use-case. The layout interface is easy to implement, e.g. by extending the [`LayoutBase`](../packages/core/src/core/layout.ts#L86) class.
 
 
 ## Painters
@@ -42,27 +42,27 @@ Writing custom painters for application-specific needs is encouraged! See the in
 
 ## Input Handlers
 
-A pane can have [**input-handlers**](../packages/core/src/core/pane.ts#L68) attached to it.
+A pane can have [**input-handlers**](../packages/core/src/core/pane.ts#L87) attached to it.
 
 Each mouse event is first offered to the topmost pane that contains the event's location. If that pane has an input-handler that handles the event, the event is passed to that input-handler. Otherwise, the event is offered to the topmost pane's parent, then to its grandparent, and so on, until an input-handler is found. (To make a pane "opaque" to mouse events, set the `Pane.consumesInputEvents` field to `true`. This always prevents mouse events from propagating up to the pane's parent, regardless of whether the pane has a suitable input-handler.)
 
 Each input-handler has a `target` field, which is a value that indicates the *thing being manipulated*. After an input-handler handles an event, [input-spectators](#input-spectators) are notified, and the handler's input-target is included in the notification, so that spectators can tell what was being manipulated.
 
-Impls of [`HoverHandler`](../packages/core/src/core/pane.ts#L104) and [`DragHandler`](../packages/core/src/core/pane.ts#L119) may have associated mouse-cursor CSS classes. For example, a `DragHandler` that implements dragging an axis-tag up and down might be associated with CSS class `y-tag-dragger`, which is configured in [defaults.css](../packages/core/src/defaults.css#L254) to set the mouse cursor to `ns-resize` &nbsp;![ns-resize](./assets/mouse-cursor-ns.png).
+Impls of [`HoverHandler`](../packages/core/src/core/pane.ts#L123) and [`DragHandler`](../packages/core/src/core/pane.ts#L138) may have associated mouse-cursor CSS classes. For example, a `DragHandler` that implements dragging an axis-tag up and down might be associated with CSS class `y-tag-dragger`, which is configured in [defaults.css](../packages/core/src/defaults.css#L254) to set the mouse cursor to `ns-resize` &nbsp;![ns-resize](./assets/mouse-cursor-ns.png).
 
 Keyboard events are passed to the input handlers of the **focused pane**, which is the most recent pane to have received a mouse-press event.
 
 
 ## Input Spectators
 
-After an input-event is handled by an input-handler, [**input-spectators**](../packages/core/src/core/pane.ts#L157) are notified. The notification includes the handler's [input-target](#input-handlers), which indicates what was being manipulated.
+After an input-event is handled by an input-handler, [**input-spectators**](../packages/core/src/core/pane.ts#L176) are notified. The notification includes the handler's [input-target](#input-handlers), which indicates what was being manipulated.
 
 Input-spectators differ from input-handlers in several ways:
  - Spectators run post-facto, after an input-event has been handled
  - Spectators have no effect on how input-events propagate among handlers
  - All spectators fire for all input-events received by any pane in the canvas
 
-Consecutive hover events with the same input-target are considered a single continuous hover. (Input-targets are compared using [ImmutableJS equality](https://immutable-js.com/docs/v4.1.0/is()/).) Spectators' `hover`/`unhover` callbacks are called when such a sequence begins and ends. Similarly with `drag`/`undrag` and `focus`/`unfocus`.
+Consecutive hover events with the same input-target are considered a single continuous hover. (Input-targets are compared using [ImmutableJS equality](https://immutable-js.com/docs/).) Spectators' `hover`/`unhover` callbacks are called when such a sequence begins and ends. Similarly with `drag`/`undrag` and `focus`/`unfocus`.
 
 For example, the handler that supports dragging a timeline-event bar has an input-target that holds (A) a reference to the dragged bar, and (B) a symbol indicating which part of the bar was being dragged: left edge, right edge, or center. When a spectator fires, it can e.g. highlight/unhighlight the bar on `hover`/`unhover`, or select the bar on `click`.
 
