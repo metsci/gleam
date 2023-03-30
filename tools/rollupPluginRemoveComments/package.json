@@ -23,11 +23,11 @@
     "shx": "^0.3.4"
   },
   "dependencies": {
-    "@rollup/plugin-commonjs": "^23.0.2",
+    "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/pluginutils": "^5.0.2",
-    "estree-walker": "^3.0.1",
-    "magic-string": "^0.26.7"
+    "estree-walker": "^3.0.3",
+    "magic-string": "^0.30.0"
   },
   "peerDependencies": {
     "rollup": "^2.0.0"
