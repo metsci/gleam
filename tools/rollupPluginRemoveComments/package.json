@@ -5,7 +5,8 @@
   "license": "BSD 3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metsci/gleam.git"
+    "url": "https://github.com/metsci/gleam.git",
+    "directory": "tools/rollupPluginRemoveComments"
   },
   "main": "./build/dist/index.js",
   "module": "./build/dist/index.es.js",

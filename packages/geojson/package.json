@@ -6,7 +6,8 @@
   "license": "BSD 3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metsci/gleam.git"
+    "url": "https://github.com/metsci/gleam.git",
+    "directory": "packages/geojson"
   },
   "module": "./build/dist/index.js",
   "types": "./build/dist/types/index.d.ts",
