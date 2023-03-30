@@ -133,6 +133,9 @@ export function asset( options ) {
     let assetRefIdsBySrcPath = new Map( );
     return {
         name: 'asset',
+        buildStart( ) {
+            assetRefIdsBySrcPath.clear( );
+        },
         async transform( code, id ) {
             if ( includeId( id ) ) {
                 const assetUrlLiterals = [];
