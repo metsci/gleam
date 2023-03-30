@@ -1,6 +1,6 @@
 {
   "name": "@metsci/gleam-mvt",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.1",
   "description": "Renderer for Mapbox Vector Tiles",
   "author": "Metron, Inc.",
   "license": "BSD 3-Clause",

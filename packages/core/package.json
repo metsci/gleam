@@ -1,6 +1,6 @@
 {
   "name": "@metsci/gleam-core",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.1",
   "description": "Interactive visualization of multi-dimensional datasets, using WebGL",
   "author": "Metron, Inc.",
   "license": "BSD 3-Clause",
