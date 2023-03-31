@@ -1,7 +1,12 @@
 # Scatter Plot Example
 
-Uses `ScatterPainter` to display a scatter plot.
+[Main](./src/main.ts) | [CSS](./src/main.css) | [Demo](https://metsci.github.io/gleam/examples/scatter/)
 
-Each data point has four coords: x, y, color, and size.
+Shows how to use `ScatterPainter` to display a scatter plot.
 
 ![Screenshot](./screenshot.png)
+
+
+## Details
+
+Each data point has four coords: x, y, color, and size.

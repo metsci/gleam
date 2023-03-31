@@ -1,7 +1,7 @@
 # Grid Layout Example
 
-Uses `GridLayout` to arrange panes.
+[Main](./src/main.ts) | [CSS](./src/main.css) | [Demo](https://metsci.github.io/gleam/examples/grid/)
 
-See [main.css](./src/main.css) for sizing of rows and columns.
+Shows how to use `GridLayout` to arrange panes.
 
 ![Screenshot](./screenshot.png)
