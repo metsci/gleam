@@ -82,15 +82,15 @@ After you make a code change and recompile, use `CTRL+F5` to do a full-reload in
 The regular reload (e.g. `CTRL+R`) doesn't always update the browser cache, which can leave the browser running old code. This can be confusing and frustrating if you don't realize what's happening, so make a habit of using `CTRL+F5` instead.
 
 
+## **(FYI)** Restarting the TypeScript language server
+
+To restart VSCode's TypeScript language server, press `CTRL+SHIFT+p`, then type `Restart TS server` in the command field and press `Enter`.
+
+VSCode is mostly good about updating type-check results, but occasionally gets confused when source files or build output get modified by an external process. Restarting the language server should only take a few seconds.
+
+
 ## **(FYI)** Reloading the VSCode window
 
 To do a full reload of the VSCode window, press `CTRL+SHIFT+p`, then type `Reload Window` in the command field and press `Enter`.
 
-VSCode is mostly good about noticing automatically when file contents change, but it needs a reload occasionally. A reload should only take a few seconds.
-
-
-## **(FYI)** Restarting the TypeScript language server
-
-To do restart VSCode's TypeScript language server, press `CTRL+SHIFT+p`, then type `Restart TS server` in the command field and press `Enter`.
-
-VSCode is mostly good about updating type-check results, but occasionally gets confused when source files or build output get modified by an external process. Restarting the language server should only take a few seconds.
+VSCode is mostly good about noticing automatically when project contents change, but it needs a reload occasionally. A reload should only take a few seconds.
